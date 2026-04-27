@@ -1,3 +1,5 @@
+// This is used to verify the bearer token sent from the front end using the firebase admin sdk
+
 const admin = require('firebase-admin')
 
 if (!admin.apps.length) {

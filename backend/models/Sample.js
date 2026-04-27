@@ -1,3 +1,4 @@
+// This just defines the shpae of the documents that will be within the collection samples
 const mongoose = require('mongoose')
 
 // Only the fields we filter/sort on are typed explicitly.
