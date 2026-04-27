@@ -1,0 +1,97 @@
+.ap-panel {
+  flex-shrink: 0;
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(14, 20, 25, 0.95);
+  border-radius: 0 14px 14px 0;
+}
+
+.ap-section-label {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 7.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #3d4f5e;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.ap-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.12s;
+  color: inherit;
+}
+
+.ap-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.ap-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.ap-btn--active {
+  background: rgba(var(--accent-rgb), 0.12);
+}
+
+.ap-btn--active .ap-icon {
+  color: var(--accent);
+}
+
+.ap-btn--active .ap-label {
+  color: rgba(var(--accent-rgb), 0.8);
+}
+
+.ap-icon {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+  transition: color 0.12s;
+}
+
+.ap-btn:hover:not(:disabled) .ap-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ap-btn:hover:not(:disabled) .ap-icon--accent {
+  color: var(--accent);
+}
+
+.ap-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.3;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 56px;
+  transition: color 0.12s;
+}
+
+.ap-btn:hover:not(:disabled) .ap-label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ap-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 4px 0;
+  flex-shrink: 0;
+}

@@ -1,0 +1,194 @@
+.filter-comp-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Header row ── */
+.filter-comp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.filter-comp-title {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.filter-clear-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filter-clear-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  color: #3d4f5e;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  padding: 0;
+}
+
+.filter-clear-btn:hover {
+  border-color: rgba(220, 60, 60, 0.35);
+  color: #e05555;
+  background: rgba(220, 60, 60, 0.06);
+}
+
+.filter-clear-tooltip {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  background: #131c25;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.15s, transform 0.15s;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.filter-clear-wrap:hover .filter-clear-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ── Section dividers ── */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 2px;
+}
+
+.filter-section-label {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+/* ── Inputs & selects ── */
+.filter-comp-input {
+
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11.5px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  flex:1;
+}
+
+.filter-comp-input::placeholder {
+  color: #3d4f5e;
+}
+
+.filter-comp-input:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
+}
+
+.filter-comp-input option {
+  background: #0e1419;
+}
+
+/* ── Checkbox groups ── */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group-label {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.filter-check-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+}
+
+.filter-check-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 12.5px;
+  color: #c4cdd6;
+  cursor: pointer;
+}
+
+.filter-check-label input[type='checkbox'],
+.filter-check-label input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.filter-check-label input[type='radio'] {
+  border-radius: 50%;
+}
+
+.filter-check-label input[type='checkbox']:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 9px 7px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.filter-check-label input[type='radio']:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='5' cy='5' r='2.5' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+

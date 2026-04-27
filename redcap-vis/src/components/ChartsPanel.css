@@ -1,0 +1,135 @@
+.cp-panel {
+  height: 270px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.cp-empty {
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.cp-scroll {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 14px 16px;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+
+/* ── Chart card ── */
+.cp-card {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 220px;
+  box-sizing: border-box;
+}
+
+.cp-card-title {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.cp-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 0;
+}
+
+/* ── Legend ── */
+.cp-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.cp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10px;
+  color: #8a9baa;
+  white-space: nowrap;
+}
+
+.cp-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cp-legend-n {
+  color: #7a8fa0;
+}
+
+/* ── Tooltip ── */
+.cp-tip {
+  background: #111820;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.cp-tip-lbl {
+  font-size: 10px;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.cp-tip-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e8edf2;
+}
+
+/* ── Placeholder cards ── */
+.cp-card--ph {
+  border-style: dashed;
+  background: transparent;
+  justify-content: center;
+  align-items: center;
+  width: 110px;
+  cursor: default;
+  opacity: 0.45;
+  gap: 8px;
+}
+
+.cp-ph-plus {
+  font-size: 24px;
+  color: #3d4f5e;
+  line-height: 1;
+}
+
+.cp-ph-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10.5px;
+  color: #7a8fa0;
+  text-align: center;
+  line-height: 1.4;
+}

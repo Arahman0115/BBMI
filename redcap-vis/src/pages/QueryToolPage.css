@@ -1,0 +1,94 @@
+.query-tool-page-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+  background: #080c10;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.query-tool-page-header {
+  height: 52px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  flex-shrink: 0;
+  margin: 5px 8px;
+}
+
+.header-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.qp-title {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.header-logout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.header-logout:hover {
+  border-color: rgba(220, 60, 60, 0.35);
+  color: #e05555;
+}
+
+/* ── Body ── */
+.query-tool-page-body {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  overflow: hidden;
+  padding: 20px 24px;
+  gap: 16px;
+}
+
+
+/* ── Table card ── */
+.data-table {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(14, 20, 25, 0.95);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}

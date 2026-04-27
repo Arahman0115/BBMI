@@ -1,0 +1,147 @@
+.ms-wrap {
+  position: relative;
+}
+
+/* ── Box (closed state) ── */
+.ms-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.ms-box--open {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
+}
+
+.ms-box:hover:not(.ms-box--open) {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+/* ── Summary text inside the box ── */
+.ms-summary {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11.5px;
+  color: #c4cdd6;
+  min-width: 0;
+}
+
+.ms-summary--empty {
+  color: #3d4f5e;
+}
+
+.ms-arrow {
+  flex-shrink: 0;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+}
+
+/* ── Dropdown ── */
+.ms-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #0e1419;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 7px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* ── Search inside dropdown ── */
+.ms-search-wrap {
+  padding: 6px 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ms-search {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 5px;
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  padding: 5px 8px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ms-search:focus {
+  border-color: rgba(var(--accent-rgb), 0.4);
+}
+
+.ms-search::placeholder {
+  color: #3d4f5e;
+}
+
+/* ── Options list ── */
+.ms-options-list {
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.ms-empty {
+  padding: 10px;
+  text-align: center;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.ms-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ms-option:hover {
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+/* ── Selected option (greyed with checkmark) ── */
+.ms-option--selected {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.ms-option--selected:hover {
+  background: rgba(220, 60, 60, 0.06);
+  color: rgba(220, 100, 100, 0.7);
+}
+
+.ms-option-check {
+  display: inline-block;
+  width: 12px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: rgba(var(--accent-rgb), 0.7);
+}

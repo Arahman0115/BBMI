@@ -1,0 +1,160 @@
+.qpb-content-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.qpb-content-area .data-table {
+  border-radius: 14px 0 0 14px;
+  border: none;
+  box-shadow: none;
+}
+
+/* ── Charts modal ── */
+.qpb-charts-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: qpb-fade-in 0.15s ease;
+}
+
+@keyframes qpb-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.qpb-charts-modal {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  width: min(92vw, 1100px);
+  animation: qpb-slide-up 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes qpb-slide-up {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+.qpb-charts-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.qpb-charts-modal-title {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.qpb-charts-close {
+  background: none;
+  border: none;
+  color: #7a8fa0;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.qpb-charts-close:hover {
+  color: #e8edf2;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Title badge ── */
+.qpb-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: 3px;
+  padding: 1px 5px;
+  vertical-align: middle;
+  margin-left: 6px;
+  position: relative;
+  top: -1px;
+}
+
+/* ── Search footer in sidebar ── */
+.qpb-search-footer {
+  padding: 12px 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qpb-live-count {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  text-align: center;
+}
+
+.qpb-search-row {
+  display: flex;
+  gap: 6px;
+}
+
+.qpb-clear-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  color: #3d4f5e;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.qpb-clear-btn:hover {
+  border-color: rgba(220, 60, 60, 0.35);
+  color: #e05555;
+  background: rgba(220, 60, 60, 0.06);
+}
+
+.qpb-search-btn {
+  flex: 1;
+  padding: 6px 0;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.qpb-search-btn:hover {
+  opacity: 0.88;
+}
