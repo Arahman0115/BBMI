@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import DataTableLib, { createTheme } from 'react-data-table-component'
+import _DataTableLib, { createTheme } from 'react-data-table-component'
+const DataTableLib = (_DataTableLib as any).default ?? _DataTableLib
 import { DonorRecord } from '../types'
 import { ALL_COLUMNS, ColumnKey } from '../columns'
 import './DataTable.css'
@@ -119,9 +120,9 @@ const DataTable: React.FC<Props> = ({
           striped
           highlightOnHover
           pointerOnHover
-          onRowClicked={row => onRowClick?.(row)}
+          onRowClicked={(row: DonorRecord) => onRowClick?.(row)}
           conditionalRowStyles={[{
-            when: row => row.id === selectedId,
+            when: (row: DonorRecord) => row.id === selectedId,
             style: { background: 'rgba(0, 104, 177, 0.10) !important' },
           }]}
           noDataComponent={<span className='dt-empty'>{emptyMessage}</span>}

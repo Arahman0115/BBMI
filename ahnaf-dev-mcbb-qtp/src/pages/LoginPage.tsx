@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
       <div className='login-card'>
 
         <div className='login-brand'>
-          <img src='/logo_mayo.svg' alt='Mayo Clinic' className='login-logo' />
+          <img src={`${import.meta.env.BASE_URL}logo_mayo.svg`} alt='Mayo Clinic' className='login-logo' />
           <div className='login-brand-divider' />
           <div className='login-brand-text'>
             <span className='login-platform-name'>Brain Bank Data Platform</span>

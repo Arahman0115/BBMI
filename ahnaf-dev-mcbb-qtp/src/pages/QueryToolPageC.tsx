@@ -55,7 +55,7 @@ const QueryToolPageC: React.FC = () => {
 
       <div className='qpc-header'>
         <NavBar />
-        <img src='/logo_mayo.svg' alt='Mayo Clinic' className='header-logo' />
+        <img src={`${import.meta.env.BASE_URL}logo_mayo.svg`} alt='Mayo Clinic' className='header-logo' />
         <div className='header-divider' />
         <h1 className='qp-title'>Query Tool <span className='qpc-badge'>C</span></h1>
         <div className='header-spacer' />
