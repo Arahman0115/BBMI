@@ -9,110 +9,121 @@ export type ColumnGroup =
   | 'Tissue'
   | 'Intake'
 
+// Keys match MongoDB field names for server-side sort.
+// Derived fields (PrimaryDiagnosis, SecondaryDiagnoses) are not directly sortable.
 export type ColumnKey =
   // Identifiers
-  | 'npid' | 'autopsy_id' | 'id' | 'mayo_clinic_id' | 'truncated_mayo_clinic_id' | 'nacc_ptid' | 'ptnum'
+  | 'NPID' | 'AutopsyID' | 'ID' | 'MayoClinicID' | 'TruncatedMayoClinicID' | 'NACCPtid' | 'PTNUM'
   // Demographics
-  | 'age_at_death' | 'sex' | 'race' | 'dob' | 'dod'
+  | 'AgeAtDeath' | 'Sex' | 'Race' | 'DOB' | 'DOD'
   // Clinical
-  | 'cognitive_status' | 'clinical_diagnosis' | 'mmse_score' | 'moca_score'
-  | 'cdr_score' | 'cdr_sb_score' | 'imaging_available' | 'sleep_study_available'
+  | 'CognitiveStatus' | 'ClinicalDiagnosis' | 'MMSEScore' | 'MoCAScore'
+  | 'CDRScore' | 'CDRSBScore' | 'ImagingAvailable' | 'SleepStudyAvailable'
   // Neuropathology
-  | 'primary_diagnosis' | 'secondary_diagnoses' | 'braak_stage' | 'thal_phase'
-  | 'cerad_np' | 'abc_score' | 'nia_reagan_score' | 'ad_type'
-  | 'nia_aa_biomarker_profile' | 'lbd_type' | 'cdlb_likelihood' | 'tdp43' | 'tdp_type'
+  | 'PrimaryDiagnosis' | 'SecondaryDiagnoses' | 'BraakStage' | 'ThalPhase'
+  | 'CERADNP' | 'ABCScore' | 'NIAReaganScore' | 'ADSubtype'
+  | 'NIAAABiomarkerProfile' | 'LBDType' | 'CDLBLikelihood' | 'TDP43' | 'TDPType'
   // Genetics
-  | 'apoe' | 'apoe_method' | 'mapt' | 'gba_genotype' | 'grn_genotype'
-  | 'rin' | 'tmem106b_rs1990622' | 'tmem106b_rs3173615'
+  | 'APOEGenotype' | 'APOEDeterminationMethod' | 'MAPT' | 'GBAGenotype' | 'GRNGenotype'
+  | 'RIN' | 'TMEM106brs1990622' | 'TMEM106brs3173615'
   // Tissue
-  | 'frozen_available' | 'ffpe_available' | 'blocks_available' | 'postmortem_interval'
-  | 'dna_extracted' | 'rna_seq_available' | 'spinal_cord_available' | 'csf_available'
-  | 'frozen_tissue_quality' | 'unstained_slides_available' | 'number_stained_slides'
+  | 'FrozenTissueAvailable' | 'FixedTissueAvailable' | 'PostmortemInterval'
+  | 'DNAExtracted' | 'RNASeq' | 'SpinalCord' | 'CSF'
+  | 'FrozenTissueQuality' | 'UnstainedSlidesAvailable' | 'NumberStainedSlides'
   // Intake
-  | 'brain_source' | 'study_source' | 'state_of_origin' | 'date_received'
-  | 'irb_number' | 'brain_weight_grams'
+  | 'BrainSource' | 'StudySource' | 'StateOfOriginOfBrain' | 'DateReceived'
+  | 'IRBNumber' | 'BrainWeight'
 
 export interface ColumnDef {
-  key: ColumnKey
-  label: string
-  group: ColumnGroup
+  key:            ColumnKey
+  label:          string
+  group:          ColumnGroup
   defaultVisible: boolean
-  selector: (row: DonorRecord) => string | number
-  sortable?: boolean
+  selector:       (row: DonorRecord) => string | number
+  sortable?:      boolean
 }
+
+const primaryDx = (r: DonorRecord) =>
+  r.diagnosis?.find(d => d.DiagnosisOrder === 1)?.DiseaseCategory ?? '—'
+
+const secondaryDx = (r: DonorRecord) =>
+  r.diagnosis?.filter(d => (d.DiagnosisOrder ?? 0) > 1)
+    .sort((a, b) => (a.DiagnosisOrder ?? 0) - (b.DiagnosisOrder ?? 0))
+    .map(d => d.DiseaseCategory).filter(Boolean).join(', ') || '—'
+
+const yn = (v: boolean | number | null | undefined) => (v ? 'Yes' : 'No')
 
 export const ALL_COLUMNS: ColumnDef[] = [
   // ── Identifiers ──────────────────────────────────────────
-  { key: 'npid',                    label: 'NPID',                  group: 'Identifiers',    defaultVisible: true,  sortable: true,  selector: r => r.npid },
-  { key: 'autopsy_id',              label: 'Autopsy ID',            group: 'Identifiers',    defaultVisible: true,  sortable: true,  selector: r => r.autopsy_id },
-  { key: 'id',                      label: 'ID',                    group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.id },
-  { key: 'mayo_clinic_id',          label: 'Mayo Clinic ID',        group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.mayo_clinic_id ?? '—' },
-  { key: 'truncated_mayo_clinic_id',label: 'Truncated Mayo ID',     group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.truncated_mayo_clinic_id ?? '—' },
-  { key: 'nacc_ptid',               label: 'NACC PTID',             group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.nacc_ptid ?? '—' },
-  { key: 'ptnum',                   label: 'PTNUM',                 group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.ptnum },
+  { key: 'NPID',                    label: 'NPID',                  group: 'Identifiers',    defaultVisible: true,  sortable: true,  selector: r => r.NPID },
+  { key: 'AutopsyID',               label: 'Autopsy ID',            group: 'Identifiers',    defaultVisible: true,  sortable: true,  selector: r => r.AutopsyID ?? '—' },
+  { key: 'ID',                      label: 'ID',                    group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.ID ?? '—' },
+  { key: 'MayoClinicID',            label: 'Mayo Clinic ID',        group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.MayoClinicID ?? '—' },
+  { key: 'TruncatedMayoClinicID',   label: 'Truncated Mayo ID',     group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.TruncatedMayoClinicID ?? '—' },
+  { key: 'NACCPtid',                label: 'NACC PTID',             group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.NACCPtid ?? '—' },
+  { key: 'PTNUM',                   label: 'PTNUM',                 group: 'Identifiers',    defaultVisible: false, sortable: true,  selector: r => r.PTNUM ?? '—' },
 
   // ── Demographics ─────────────────────────────────────────
-  { key: 'age_at_death',            label: 'Age at Death',          group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.age_at_death },
-  { key: 'sex',                     label: 'Sex',                   group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.sex },
-  { key: 'race',                    label: 'Race',                  group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.race },
-  { key: 'dob',                     label: 'DOB',                   group: 'Demographics',   defaultVisible: false, sortable: true,  selector: r => r.dob },
-  { key: 'dod',                     label: 'DOD',                   group: 'Demographics',   defaultVisible: false, sortable: true,  selector: r => r.dod },
+  { key: 'AgeAtDeath',              label: 'Age at Death',          group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.AgeAtDeath ?? '—' },
+  { key: 'Sex',                     label: 'Sex',                   group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.Sex ?? '—' },
+  { key: 'Race',                    label: 'Race',                  group: 'Demographics',   defaultVisible: true,  sortable: true,  selector: r => r.Race ?? '—' },
+  { key: 'DOB',                     label: 'DOB',                   group: 'Demographics',   defaultVisible: false, sortable: true,  selector: r => r.DOB ?? '—' },
+  { key: 'DOD',                     label: 'DOD',                   group: 'Demographics',   defaultVisible: false, sortable: true,  selector: r => r.DOD ?? '—' },
 
   // ── Clinical ─────────────────────────────────────────────
-  { key: 'cognitive_status',        label: 'Cognitive Status',      group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.cognitive_status },
-  { key: 'clinical_diagnosis',      label: 'Clinical Diagnosis',    group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.clinical_diagnosis },
-  { key: 'mmse_score',              label: 'MMSE',                  group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.mmse_score ?? '—' },
-  { key: 'moca_score',              label: 'MoCA',                  group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.moca_score ?? '—' },
-  { key: 'cdr_score',               label: 'CDR',                   group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.cdr_score ?? '—' },
-  { key: 'cdr_sb_score',            label: 'CDR-SB',                group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.cdr_sb_score ?? '—' },
-  { key: 'imaging_available',       label: 'Imaging',               group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.imaging_available ? 'Yes' : 'No' },
-  { key: 'sleep_study_available',   label: 'Sleep Study',           group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.sleep_study_available ? 'Yes' : 'No' },
+  { key: 'CognitiveStatus',         label: 'Cognitive Status',      group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.CognitiveStatus ?? '—' },
+  { key: 'ClinicalDiagnosis',       label: 'Clinical Diagnosis',    group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.ClinicalDiagnosis ?? '—' },
+  { key: 'MMSEScore',               label: 'MMSE',                  group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.MMSEScore ?? '—' },
+  { key: 'MoCAScore',               label: 'MoCA',                  group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.MoCAScore ?? '—' },
+  { key: 'CDRScore',                label: 'CDR',                   group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.CDRScore ?? '—' },
+  { key: 'CDRSBScore',              label: 'CDR-SB',                group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => r.CDRSBScore ?? '—' },
+  { key: 'ImagingAvailable',        label: 'Imaging',               group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => yn(r.ImagingAvailable) },
+  { key: 'SleepStudyAvailable',     label: 'Sleep Study',           group: 'Clinical',       defaultVisible: false, sortable: true,  selector: r => yn(r.SleepStudyAvailable) },
 
   // ── Neuropathology ───────────────────────────────────────
-  { key: 'primary_diagnosis',       label: 'Primary Diagnosis',     group: 'Neuropathology', defaultVisible: true,  sortable: true,  selector: r => r.primary_diagnosis },
-  { key: 'secondary_diagnoses',     label: 'Co-Pathologies',        group: 'Neuropathology', defaultVisible: true,  sortable: false, selector: r => r.secondary_diagnoses?.join(', ') || '—' },
-  { key: 'braak_stage',             label: 'Braak Stage',           group: 'Neuropathology', defaultVisible: true,  sortable: true,  selector: r => r.braak_stage },
-  { key: 'thal_phase',              label: 'Thal Phase',            group: 'Neuropathology', defaultVisible: true,  sortable: true,  selector: r => r.thal_phase },
-  { key: 'cerad_np',                label: 'CERAD NP',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.cerad_np ?? '—' },
-  { key: 'abc_score',               label: 'ABC Score',             group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.abc_score ?? '—' },
-  { key: 'nia_reagan_score',        label: 'NIA-Reagan',            group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.nia_reagan_score ?? '—' },
-  { key: 'ad_type',                 label: 'AD Subtype',            group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.ad_type ?? '—' },
-  { key: 'nia_aa_biomarker_profile',label: 'NIA-AA Profile',        group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.nia_aa_biomarker_profile ?? '—' },
-  { key: 'lbd_type',                label: 'LBD Type',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.lbd_type ?? '—' },
-  { key: 'cdlb_likelihood',         label: 'CDLB Likelihood',       group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.cdlb_likelihood ?? '—' },
-  { key: 'tdp43',                   label: 'TDP-43',                group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.tdp43 ? 'Yes' : 'No' },
-  { key: 'tdp_type',                label: 'TDP Type',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.tdp_type ?? '—' },
+  { key: 'PrimaryDiagnosis',        label: 'Primary Diagnosis',     group: 'Neuropathology', defaultVisible: true,  sortable: false, selector: r => primaryDx(r) },
+  { key: 'SecondaryDiagnoses',      label: 'Co-Pathologies',        group: 'Neuropathology', defaultVisible: true,  sortable: false, selector: r => secondaryDx(r) },
+  { key: 'BraakStage',              label: 'Braak Stage',           group: 'Neuropathology', defaultVisible: true,  sortable: true,  selector: r => r.BraakStage ?? '—' },
+  { key: 'ThalPhase',               label: 'Thal Phase',            group: 'Neuropathology', defaultVisible: true,  sortable: true,  selector: r => r.ThalPhase ?? '—' },
+  { key: 'CERADNP',                 label: 'CERAD NP',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.CERADNP ?? '—' },
+  { key: 'ABCScore',                label: 'ABC Score',             group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.ABCScore ?? '—' },
+  { key: 'NIAReaganScore',          label: 'NIA-Reagan',            group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.NIAReaganScore ?? '—' },
+  { key: 'ADSubtype',               label: 'AD Subtype',            group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.ADSubtype ?? '—' },
+  { key: 'NIAAABiomarkerProfile',   label: 'NIA-AA Profile',        group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.NIAAABiomarkerProfile ?? '—' },
+  { key: 'LBDType',                 label: 'LBD Type',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.LBDType ?? '—' },
+  { key: 'CDLBLikelihood',          label: 'CDLB Likelihood',       group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.CDLBLikelihood ?? '—' },
+  { key: 'TDP43',                   label: 'TDP-43',                group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => yn(r.TDP43) },
+  { key: 'TDPType',                 label: 'TDP Type',              group: 'Neuropathology', defaultVisible: false, sortable: true,  selector: r => r.TDPType ?? '—' },
 
   // ── Genetics ─────────────────────────────────────────────
-  { key: 'apoe',                    label: 'APOE',                  group: 'Genetics',       defaultVisible: true,  sortable: true,  selector: r => r.apoe },
-  { key: 'apoe_method',             label: 'APOE Method',           group: 'Genetics',       defaultVisible: true,  sortable: true,  selector: r => r.apoe_method },
-  { key: 'mapt',                    label: 'MAPT',                  group: 'Genetics',       defaultVisible: true,  sortable: true,  selector: r => r.mapt },
-  { key: 'gba_genotype',            label: 'GBA',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.gba_genotype ?? '—' },
-  { key: 'grn_genotype',            label: 'GRN',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.grn_genotype ?? '—' },
-  { key: 'rin',                     label: 'RIN',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.rin ?? '—' },
-  { key: 'tmem106b_rs1990622',      label: 'TMEM106B rs1990622',    group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.tmem106b_rs1990622 ?? '—' },
-  { key: 'tmem106b_rs3173615',      label: 'TMEM106B rs3173615',    group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.tmem106b_rs3173615 ?? '—' },
+  { key: 'APOEGenotype',            label: 'APOE',                  group: 'Genetics',       defaultVisible: true,  sortable: true,  selector: r => r.APOEGenotype ? `ε${r.APOEGenotype}` : '—' },
+  { key: 'APOEDeterminationMethod', label: 'APOE Method',           group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.APOEDeterminationMethod ?? '—' },
+  { key: 'MAPT',                    label: 'MAPT',                  group: 'Genetics',       defaultVisible: true,  sortable: true,  selector: r => r.MAPT ?? '—' },
+  { key: 'GBAGenotype',             label: 'GBA',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.GBAGenotype ?? '—' },
+  { key: 'GRNGenotype',             label: 'GRN',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.GRNGenotype ?? '—' },
+  { key: 'RIN',                     label: 'RIN',                   group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.RIN ?? '—' },
+  { key: 'TMEM106brs1990622',       label: 'TMEM106B rs1990622',    group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.TMEM106brs1990622 ?? '—' },
+  { key: 'TMEM106brs3173615',       label: 'TMEM106B rs3173615',    group: 'Genetics',       defaultVisible: false, sortable: true,  selector: r => r.TMEM106brs3173615 ?? '—' },
 
   // ── Tissue ───────────────────────────────────────────────
-  { key: 'frozen_available',        label: 'Frozen',                group: 'Tissue',         defaultVisible: true,  sortable: true,  selector: r => r.tissue.frozen_available ? 'Yes' : 'No' },
-  { key: 'ffpe_available',          label: 'FFPE',                  group: 'Tissue',         defaultVisible: true,  sortable: true,  selector: r => r.tissue.ffpe_available ? 'Yes' : 'No' },
-  { key: 'blocks_available',        label: 'Blocks',                group: 'Tissue',         defaultVisible: true,  sortable: true,  selector: r => r.tissue.blocks_available },
-  { key: 'postmortem_interval',     label: 'PMI (hrs)',             group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.postmortem_interval_hours },
-  { key: 'dna_extracted',           label: 'DNA Extracted',         group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.dna_extracted ? 'Yes' : 'No' },
-  { key: 'rna_seq_available',       label: 'RNA-seq',               group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.rna_seq_available ? 'Yes' : 'No' },
-  { key: 'spinal_cord_available',   label: 'Spinal Cord',           group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.spinal_cord_available ? 'Yes' : 'No' },
-  { key: 'csf_available',           label: 'CSF',                   group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.csf_available ? 'Yes' : 'No' },
-  { key: 'frozen_tissue_quality',   label: 'Frozen Quality',        group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.frozen_tissue_quality ?? '—' },
-  { key: 'unstained_slides_available', label: 'Unstained Slides',   group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.unstained_slides_available ? 'Yes' : 'No' },
-  { key: 'number_stained_slides',   label: 'Stained Slides #',      group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.tissue.number_stained_slides },
+  { key: 'FrozenTissueAvailable',   label: 'Frozen',                group: 'Tissue',         defaultVisible: true,  sortable: true,  selector: r => yn(r.FrozenTissueAvailable) },
+  { key: 'FixedTissueAvailable',    label: 'FFPE',                  group: 'Tissue',         defaultVisible: true,  sortable: true,  selector: r => yn(r.FixedTissueAvailable) },
+  { key: 'PostmortemInterval',      label: 'PMI (hrs)',             group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.PostmortemInterval ?? '—' },
+  { key: 'DNAExtracted',            label: 'DNA Extracted',         group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => yn(r.DNAExtracted) },
+  { key: 'RNASeq',                  label: 'RNA-seq',               group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => yn(r.RNASeq) },
+  { key: 'SpinalCord',              label: 'Spinal Cord',           group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => yn(r.SpinalCord) },
+  { key: 'CSF',                     label: 'CSF',                   group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => yn(r.CSF) },
+  { key: 'FrozenTissueQuality',     label: 'Frozen Quality',        group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.FrozenTissueQuality ?? '—' },
+  { key: 'UnstainedSlidesAvailable',label: 'Unstained Slides',      group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => yn(r.UnstainedSlidesAvailable) },
+  { key: 'NumberStainedSlides',     label: 'Stained Slides #',      group: 'Tissue',         defaultVisible: false, sortable: true,  selector: r => r.NumberStainedSlides ?? '—' },
 
   // ── Intake ───────────────────────────────────────────────
-  { key: 'brain_source',            label: 'Brain Source',          group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.brain_source },
-  { key: 'study_source',            label: 'Study Source',          group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.study_source },
-  { key: 'state_of_origin',         label: 'State of Origin',       group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.state_of_origin },
-  { key: 'date_received',           label: 'Date Received',         group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.date_received },
-  { key: 'irb_number',              label: 'IRB Number',            group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.irb_number },
-  { key: 'brain_weight_grams',      label: 'Brain Weight (g)',      group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.brain_weight_grams },
+  { key: 'BrainSource',             label: 'Brain Source',          group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.BrainSource ?? '—' },
+  { key: 'StudySource',             label: 'Study Source',          group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.StudySource ?? '—' },
+  { key: 'StateOfOriginOfBrain',    label: 'State of Origin',       group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.StateOfOriginOfBrain ?? '—' },
+  { key: 'DateReceived',            label: 'Date Received',         group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.DateReceived ?? '—' },
+  { key: 'IRBNumber',               label: 'IRB Number',            group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.IRBNumber ?? '—' },
+  { key: 'BrainWeight',             label: 'Brain Weight (g)',      group: 'Intake',         defaultVisible: false, sortable: true,  selector: r => r.BrainWeight ?? '—' },
 ]
 
 export const COLUMN_GROUPS: ColumnGroup[] = [
@@ -120,9 +131,8 @@ export const COLUMN_GROUPS: ColumnGroup[] = [
 ]
 
 export const PHI_COLUMNS: ColumnKey[] = [
-  'npid', 'autopsy_id', 'mayo_clinic_id', 'truncated_mayo_clinic_id', 'nacc_ptid', 'ptnum',
-  'dob', 'dod',
-  'irb_number',
+  'NPID', 'AutopsyID', 'MayoClinicID', 'TruncatedMayoClinicID', 'NACCPtid', 'PTNUM',
+  'DOB', 'DOD', 'IRBNumber',
 ]
 
 export const DEFAULT_VISIBLE: Record<ColumnKey, boolean> = Object.fromEntries(

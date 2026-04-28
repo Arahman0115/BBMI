@@ -5,59 +5,44 @@
 
 
 // ------------------------------------------------------------
-// PRIMITIVES / UNION TYPES
+// PRIMITIVES / UNION TYPES  (used in FilterState)
 // ------------------------------------------------------------
 
-export type BraakStage = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-export type ThalPhase = 0 | 1 | 2 | 3 | 4 | 5;
-export type Sex = 'Male' | 'Female';
-export type ApoeGenotype = '22' | '23' | '24' | '33' | '34' | '44';
+export type BraakStage  = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+export type ThalPhase   = 0 | 1 | 2 | 3 | 4 | 5;
+export type Sex         = 'Male' | 'Female';
+export type ApoeGenotype  = '22' | '23' | '24' | '33' | '34' | '44';
 export type AlzheimersType = 'Amnestic AD' | 'Atypical AD';
-export type MaptHaplotype = 'H1/H1' | 'H1/H2' | 'H2/H2';
-export type ApoeMethod = 'PCR-RFLP' | 'TaqMan Genotyping' | 'Sanger Sequencing' | 'SNP Array';
-export type CeradScore = 'Absent' | 'Sparse' | 'Moderate' | 'Frequent';
-export type FrozenTissueQuality = 'Excellent' | 'Good' | 'Fair' | 'Poor';
-export type CdlbLikelihood = 'High' | 'Intermediate' | 'Low' | 'No LBD';
-export type LbdType = 'Diffuse' | 'Limbic' | 'Neocortical' | 'Brainstem' | 'None';
-export type CognitiveStatus = 'NCI' | 'MCI' | 'Dementia';
-export type NiaReaganScore = 'High' | 'Intermediate' | 'Low' | 'Not AD';
+export type MaptHaplotype  = 'H1/H1' | 'H1/H2' | 'H2/H2';
+export type ApoeMethod     = 'PCR-RFLP' | 'TaqMan Genotyping' | 'Sanger Sequencing' | 'SNP Array';
+export type CeradScore     = 'Absent' | 'Sparse' | 'Moderate' | 'Frequent';
 
 
 // ------------------------------------------------------------
-// TISSUE
+// DIAGNOSIS ENTRY  (replaces primary_diagnosis / secondary_diagnoses)
+// DiagnosisOrder === 1 is the primary diagnosis; 2+ are secondary.
 // ------------------------------------------------------------
-export interface Tissue {
-  // Fixed / FFPE
-  ffpe_available: boolean;
-  fixed_tissue_unit?: string;
-  fixed_tissue_box_number?: string;
+export interface DiagnosisEntry {
+  NPID?:                string | null;
+  DiagnosisOrder?:      number | null;
+  DiseaseCategory?:     string | null;
+  DiseaseSubtype?:      string | null;
+  DiseaseSpecificType?: string | null;
+  DiseaseStage?:        string | null;
+  DiseaseDescriptor?:   string | null;
+  DiseaseRegion?:       string | null;
+  DiagnosisComments?:   string | null;
+}
 
-  // Frozen
-  frozen_available: boolean;
-  frozen_tissue_quality?: FrozenTissueQuality;
-  frozen_tissue_case_value?: string;
-  freezer_number?: string;
-  freezer_box?: string;
-  freeze_thaw_times?: number;
-  frozen_tissue_comments?: string;
 
-  // Nucleic acids
-  dna_extracted: boolean;
-  extracted_dna_not_in_freezer?: boolean;
-  dna_location?: string;
-  rna_seq_available: boolean;
-
-  // General inventory
-  blocks_available: number;
-  regions_sampled: string[];
-  postmortem_interval_hours: number;
-
-  // Other biospecimens
-  spinal_cord_available: boolean;
-  olfactory_bulb_available: boolean;
-  csf_available: boolean;
-  unstained_slides_available: boolean;
-  number_stained_slides: number;
+// ------------------------------------------------------------
+// SLIDE ENTRY
+// ------------------------------------------------------------
+export interface SlideEntry {
+  npid?:         string | null;
+  brain_region?: string | null;
+  stain_target?: string | null;
+  hash?:         string | null;
 }
 
 
@@ -65,98 +50,123 @@ export interface Tissue {
 // DONOR RECORD
 // ------------------------------------------------------------
 export interface DonorRecord {
+  _id?:                   string;
+
   // ── Identifiers ──────────────────────────────────────────
-  id: number;
-  npid: string;
-  autopsy_id: string;
-  mayo_clinic_id?: string;
-  truncated_mayo_clinic_id?: string;
-  nacc_ptid?: string;
-  ptnum: string;
-  irb_number: string;
-  irb_alerts?: string;
+  ID?:                    string | null;
+  NPID:                   string;
+  AutopsyID?:             string | null;
+  MayoClinicID?:          string | null;
+  TruncatedMayoClinicID?: string | null;
+  NACCPtid?:              string | null;
+  PTNUM?:                 string | null;
 
   // ── Intake ───────────────────────────────────────────────
-  date_received: string;
-  brain_source: string;
-  study_source: string;
-  state_of_origin: string;
-  receive_comments?: string;
+  DateReceived?:       string | null;
+  BrainSource?:        string | null;
+  StudySource?:        string | null;
+  StateOfOriginOfBrain?: string | null;
+  IRBNumber?:          string | null;
+  IRBAlerts?:          string | null;
+  ReceiveComments?:    string | null;
 
   // ── Demographics ─────────────────────────────────────────
-  dob: string;
-  dod: string;
-  age_at_death: number;
-  sex: Sex;
-  race: string;
+  DOB?:        string | null;
+  DOD?:        string | null;
+  AgeAtDeath?: number | null;
+  Sex?:        string | null;
+  Race?:       string | null;
 
   // ── Clinical ─────────────────────────────────────────────
-  clinical_diagnosis: string;
-  clinical_diagnosis_comments?: string;
-  family_history?: string;
-  age_at_onset?: number;
-  date_of_onset?: string;
-  date_of_symptom_onset?: string;
-  duration_years?: number;
-  cognitive_status: CognitiveStatus;
-  mmse_score?: number;
-  moca_score?: number;
-  cdr_score?: number;
-  cdr_sb_score?: number;
-  alsfrs_r_score?: number;
-  imaging_available: boolean;
-  sleep_study_available: boolean;
+  ClinicalDiagnosis?:         string | null;
+  ClinicalDiagnosisComments?: string | null;
+  FamilyHistory?:             string | null;
+  AgeAtOnset?:                number | null;
+  DateOfOnset?:               string | null;
+  DateOfSymptomOnset?:        string | null;
+  Duration?:                  number | null;
+  CognitiveStatus?:           string | null;
+  MMSEScore?:                 number | null;
+  MoCAScore?:                 number | null;
+  CDRScore?:                  number | null;
+  CDRSBScore?:                number | null;
+  ALSFRSRScore?:              number | null;
+  ImagingAvailable?:          boolean | number | null;
+  SleepStudyAvailable?:       boolean | number | null;
 
   // ── Autopsy ──────────────────────────────────────────────
-  brain_cutting_date: string;
-  brain_weight_grams: number;
-  gross_characteristics?: string;
-  mcj_diener?: string;
-  autopsy_notes?: string;
-  original_path_dx: string;
-  outside_path_dx?: string;
-  digital_report_available: boolean;
-  sign_out_date: string;
-  cpc_conference_date?: string;
+  BrainCuttingDate?:       string | null;
+  BrainWeight?:            number | null;
+  PostmortemInterval?:     number | null;
+  GrossCharacteristics?:   string | null;
+  MCJDiener?:              string | null;
+  AutopsyNotes?:           string | null;
+  UnstainedSlidesAvailable?: number | null;
+  NumberStainedSlides?:    number | null;
+  OriginalPathDx?:         string | null;
+  OutsidePathDx?:          string | null;
+  DigitalReportAvailable?: boolean | number | null;
+  SignOutDate?:            string | null;
+  CPCConferenceDate?:      string | null;
 
   // ── Neuropathology ───────────────────────────────────────
-  braak_stage: BraakStage;
-  thal_phase: ThalPhase;
-  cerad_np?: CeradScore;
-  abc_score?: string;
-  a_score?: number;
-  b_score?: number;
-  c_score?: number;
-  nia_reagan_score?: NiaReaganScore;
-  primary_diagnosis: string;
-  ad_type?: AlzheimersType;
-  secondary_diagnoses: string[];
-  nia_aa_biomarker_profile?: string;
-  pd_braak_stage?: number;
-  lbd_type?: LbdType;
-  cdlb_likelihood?: CdlbLikelihood;
-  va_d_summary?: string;
-  va_d_kalaria?: string;
-  kalaria_modified?: string;
-  tdp43: boolean;
-  tdp_type?: string;
-  tdp_type_old?: string;
-
-  // ── Genetics ─────────────────────────────────────────────
-  apoe: ApoeGenotype;
-  apoe_method: ApoeMethod;
-  gba_genotype?: string;
-  grn_genotype?: string;
-  grn_rs5848?: string;
-  mapt: MaptHaplotype;
-  mobp?: string;
-  rin?: number;
-  snca?: string;
-  tmem106b_rs1990622?: string;
-  tmem106b_rs3173615?: string;
+  ThalPhase?:            number | null;
+  BraakStage?:           number | null;
+  CERADNP?:              string | null;
+  ABCScore?:             string | null;
+  AScore?:               number | null;
+  BScore?:               number | null;
+  CScore?:               number | null;
+  NIAReaganScore?:       string | null;
+  ADSubtype?:            string | null;
+  NIAAABiomarkerProfile?: string | null;
+  PDBraakStage?:         number | null;
+  LBDType?:              string | null;
+  CDLBLikelihood?:       string | null;
+  VaDSummary?:           string | null;
+  VaDKalaria?:           string | null;
+  KalariaModified?:      string | null;
+  TDP43?:                boolean | number | null;
+  TDPType?:              string | null;
+  TDPTypeOld?:           string | null;
 
   // ── Tissue ───────────────────────────────────────────────
-  tissue: Tissue;
+  SpinalCord?:              number | null;
+  OlfactoryBulb?:           number | null;
+  CSF?:                     number | null;
+  FixedTissueAvailable?:    number | null;
+  FixedTissueUnit?:         string | null;
+  FixedTissueBoxNumber?:    string | null;
+  FrozenTissueAvailable?:   number | null;
+  FrozenTissueQuality?:     string | null;
+  FrozenTissueCaseValue?:   string | null;
+  FreezerNumber?:           string | null;
+  FreezerBox?:              string | null;
+  FreezeThawTimes?:         number | null;
+  FrozenTissueComments?:    string | null;
+  DNAExtracted?:            number | null;
+  ExtractedDNANotInFreezer?: number | null;
+  DNALocation?:             string | null;
+  RNASeq?:                  number | null;
+
+  // ── Genetics ─────────────────────────────────────────────
+  APOEGenotype?:          string | null;
+  APOEDeterminationMethod?: string | null;
+  GBAGenotype?:           string | null;
+  GRNGenotype?:           string | null;
+  GRNrs5848?:             string | null;
+  MAPT?:                  string | null;
+  MOBP?:                  string | null;
+  RIN?:                   number | null;
+  SNCA?:                  string | null;
+  TMEM106brs1990622?:     string | null;
+  TMEM106brs3173615?:     string | null;
+
+  // ── Diagnoses (ordered array) ─────────────────────────────
+  diagnosis?: DiagnosisEntry[];
+
+  // ── Slides ───────────────────────────────────────────────
+  slides?: SlideEntry[];
 }
 
 
@@ -164,20 +174,20 @@ export interface DonorRecord {
 // FILTER STATE
 // ------------------------------------------------------------
 export interface FilterState {
-  idSearch?: string;
-  sex?: Sex;
-  race?: string[];
-  ageRanges?: string;
-  thalPhases?: ThalPhase[];
-  braakStages?: BraakStage[];
-  ceradScores?: CeradScore[];
-  primaryDiagnosis?: string[];
-  ad_type?: AlzheimersType[];
-  hasSecondaryDiagnosis?: boolean;
-  secondaryDiagnosis?: string;
-  apoe?: ApoeGenotype[];
-  apoeMethod?: ApoeMethod;
-  mapt?: MaptHaplotype[];
-  frozenOnly?: boolean;
-  ffpeOnly?: boolean;
+  idSearch?:          string;
+  sex?:               Sex;
+  race?:              string[];
+  ageRanges?:         string;
+  thalPhases?:        ThalPhase[];
+  braakStages?:       BraakStage[];
+  ceradScores?:       CeradScore[];
+  studySource?:       string[];
+  primaryDiagnosis?:  string[];
+  ad_type?:           AlzheimersType[];
+  secondaryDiagnoses?: string[];
+  apoe?:              ApoeGenotype[];
+  apoeMethod?:        ApoeMethod;
+  mapt?:              MaptHaplotype[];
+  tissueAvailable?:   string[];
+  diagnosisOrder?:    { diagnosis: string; min: number; max: number };
 }

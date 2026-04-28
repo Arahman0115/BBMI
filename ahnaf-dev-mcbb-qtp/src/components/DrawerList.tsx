@@ -25,12 +25,12 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
 const braakColor = (s: number) => s >= 5 ? 'high' : s >= 3 ? 'mid' : 'low'
 
 const DrawerList: React.FC<Props> = ({ data }) => {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set())
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
-  const toggle = (id: number) =>
+  const toggle = (npid: string) =>
     setExpanded(prev => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      next.has(npid) ? next.delete(npid) : next.add(npid)
       return next
     })
 
@@ -50,23 +50,26 @@ const DrawerList: React.FC<Props> = ({ data }) => {
       </div>
 
       {data.map(r => {
-        const isOpen = expanded.has(r.id)
-        return (
-          <div key={r.id} className={`dl-item${isOpen ? ' dl-item--open' : ''}`}>
+        const isOpen   = expanded.has(r.NPID)
+        const primaryDx = r.diagnosis?.find(d => d.DiagnosisOrder === 1)?.DiseaseCategory ?? '—'
+        const sortedDx  = r.diagnosis?.slice().sort((a, b) => (a.DiagnosisOrder ?? 0) - (b.DiagnosisOrder ?? 0)) ?? []
 
-            <div className='dl-row' onClick={() => toggle(r.id)}>
+        return (
+          <div key={r.NPID} className={`dl-item${isOpen ? ' dl-item--open' : ''}`}>
+
+            <div className='dl-row' onClick={() => toggle(r.NPID)}>
               <span className='dl-chevron'>{isOpen ? '▾' : '▸'}</span>
-              <span className='dl-col-id dl-mono'>{r.npid}</span>
-              <span className='dl-col-age'>{r.age_at_death}</span>
-              <span className='dl-col-sex'>{r.sex}</span>
-              <span className='dl-col-dx'>{r.primary_diagnosis}</span>
-              <span className={`dl-col-braak dl-braak dl-braak--${braakColor(r.braak_stage)}`}>
-                {r.braak_stage}
+              <span className='dl-col-id dl-mono'>{r.NPID}</span>
+              <span className='dl-col-age'>{r.AgeAtDeath ?? '—'}</span>
+              <span className='dl-col-sex'>{r.Sex ?? '—'}</span>
+              <span className='dl-col-dx'>{primaryDx}</span>
+              <span className={`dl-col-braak dl-braak dl-braak--${braakColor(r.BraakStage ?? 0)}`}>
+                {r.BraakStage ?? '—'}
               </span>
-              <span className='dl-col-apoe dl-mono'>ε{r.apoe}</span>
+              <span className='dl-col-apoe dl-mono'>{r.APOEGenotype ? `ε${r.APOEGenotype}` : '—'}</span>
               <span className='dl-col-tissue dl-tissue-pills'>
-                {r.tissue.frozen_available && <span className='dl-pill dl-pill--frozen'>Frozen</span>}
-                {r.tissue.ffpe_available   && <span className='dl-pill dl-pill--ffpe'>FFPE</span>}
+                {!!r.FrozenTissueAvailable && <span className='dl-pill dl-pill--frozen'>Frozen</span>}
+                {!!r.FixedTissueAvailable   && <span className='dl-pill dl-pill--ffpe'>FFPE</span>}
               </span>
             </div>
 
@@ -75,75 +78,75 @@ const DrawerList: React.FC<Props> = ({ data }) => {
                 <div className='dl-card'>
 
                   <Section title='Identifiers'>
-                    <Field label='NPID'              value={r.npid} />
-                    <Field label='Autopsy ID'        value={r.autopsy_id} />
-                    <Field label='Mayo Clinic ID'    value={r.mayo_clinic_id} />
-                    <Field label='NACC PTID'         value={r.nacc_ptid} />
-                    <Field label='IRB'               value={r.irb_number} />
-                    <Field label='Brain Source'      value={r.brain_source} />
+                    <Field label='NPID'              value={r.NPID} />
+                    <Field label='Autopsy ID'        value={r.AutopsyID} />
+                    <Field label='Mayo Clinic ID'    value={r.MayoClinicID} />
+                    <Field label='NACC PTID'         value={r.NACCPtid} />
+                    <Field label='IRB'               value={r.IRBNumber} />
+                    <Field label='Brain Source'      value={r.BrainSource} />
                   </Section>
 
                   <Section title='Demographics'>
-                    <Field label='Age at Death'  value={r.age_at_death} />
-                    <Field label='Sex'           value={r.sex} />
-                    <Field label='Race'          value={r.race} />
-                    <Field label='DOB'           value={r.dob} />
-                    <Field label='DOD'           value={r.dod} />
-                    <Field label='State'         value={r.state_of_origin} />
+                    <Field label='Age at Death'  value={r.AgeAtDeath} />
+                    <Field label='Sex'           value={r.Sex} />
+                    <Field label='Race'          value={r.Race} />
+                    <Field label='DOB'           value={r.DOB} />
+                    <Field label='DOD'           value={r.DOD} />
+                    <Field label='State'         value={r.StateOfOriginOfBrain} />
                   </Section>
 
                   <Section title='Clinical'>
-                    <Field label='Cognitive Status'    value={r.cognitive_status} />
-                    <Field label='Clinical Diagnosis'  value={r.clinical_diagnosis} />
-                    <Field label='Age at Onset'        value={r.age_at_onset} />
-                    <Field label='Duration (yrs)'      value={r.duration_years} />
-                    <Field label='MMSE'                value={r.mmse_score} />
-                    <Field label='MoCA'                value={r.moca_score} />
-                    <Field label='CDR'                 value={r.cdr_score} />
-                    <Field label='CDR-SB'              value={r.cdr_sb_score} />
-                    <Field label='Family History'      value={r.family_history} />
+                    <Field label='Cognitive Status'    value={r.CognitiveStatus} />
+                    <Field label='Clinical Diagnosis'  value={r.ClinicalDiagnosis} />
+                    <Field label='Age at Onset'        value={r.AgeAtOnset} />
+                    <Field label='Duration (yrs)'      value={r.Duration} />
+                    <Field label='MMSE'                value={r.MMSEScore} />
+                    <Field label='MoCA'                value={r.MoCAScore} />
+                    <Field label='CDR'                 value={r.CDRScore} />
+                    <Field label='CDR-SB'              value={r.CDRSBScore} />
+                    <Field label='Family History'      value={r.FamilyHistory} />
                   </Section>
 
                   <Section title='Neuropathology'>
-                    <Field label='Primary Dx'          value={r.primary_diagnosis} />
-                    <Field label='AD Type'             value={r.ad_type} />
-                    <Field label='Braak Stage'         value={r.braak_stage} />
-                    <Field label='Thal Phase'          value={r.thal_phase} />
-                    <Field label='CERAD'               value={r.cerad_np} />
-                    <Field label='ABC Score'           value={r.abc_score} />
-                    <Field label='NIA-Reagan'          value={r.nia_reagan_score} />
-                    <Field label='LBD Type'            value={r.lbd_type} />
-                    <Field label='CDLB Likelihood'     value={r.cdlb_likelihood} />
-                    <Field label='TDP-43'              value={r.tdp43} />
-                    <Field label='TDP Type'            value={r.tdp_type} />
-                    <Field label='Secondary Dx'        value={r.secondary_diagnoses.join(', ') || undefined} />
-                    <Field label='NIA-AA Profile'      value={r.nia_aa_biomarker_profile} />
-                    <Field label='VA-D Summary'        value={r.va_d_summary} />
+                    {sortedDx.map(d => (
+                      <Field key={d.DiagnosisOrder} label={`Dx ${d.DiagnosisOrder}`} value={d.DiseaseCategory} />
+                    ))}
+                    <Field label='AD Subtype'          value={r.ADSubtype} />
+                    <Field label='Braak Stage'         value={r.BraakStage} />
+                    <Field label='Thal Phase'          value={r.ThalPhase} />
+                    <Field label='CERAD'               value={r.CERADNP} />
+                    <Field label='ABC Score'           value={r.ABCScore} />
+                    <Field label='NIA-Reagan'          value={r.NIAReaganScore} />
+                    <Field label='LBD Type'            value={r.LBDType} />
+                    <Field label='CDLB Likelihood'     value={r.CDLBLikelihood} />
+                    <Field label='TDP-43'              value={r.TDP43 != null ? !!r.TDP43 : undefined} />
+                    <Field label='TDP Type'            value={r.TDPType} />
+                    <Field label='NIA-AA Profile'      value={r.NIAAABiomarkerProfile} />
+                    <Field label='VA-D Summary'        value={r.VaDSummary} />
                   </Section>
 
                   <Section title='Genetics'>
-                    <Field label='APOE'          value={r.apoe} />
-                    <Field label='APOE Method'   value={r.apoe_method} />
-                    <Field label='MAPT'          value={r.mapt} />
-                    <Field label='GBA'           value={r.gba_genotype} />
-                    <Field label='GRN'           value={r.grn_genotype} />
-                    <Field label='SNCA'          value={r.snca} />
-                    <Field label='RIN'           value={r.rin} />
+                    <Field label='APOE'          value={r.APOEGenotype} />
+                    <Field label='APOE Method'   value={r.APOEDeterminationMethod} />
+                    <Field label='MAPT'          value={r.MAPT} />
+                    <Field label='GBA'           value={r.GBAGenotype} />
+                    <Field label='GRN'           value={r.GRNGenotype} />
+                    <Field label='SNCA'          value={r.SNCA} />
+                    <Field label='RIN'           value={r.RIN} />
                   </Section>
 
                   <Section title='Tissue'>
-                    <Field label='Frozen'              value={r.tissue.frozen_available} />
-                    <Field label='Frozen Quality'      value={r.tissue.frozen_tissue_quality} />
-                    <Field label='Freeze/Thaw'         value={r.tissue.freeze_thaw_times} />
-                    <Field label='FFPE'                value={r.tissue.ffpe_available} />
-                    <Field label='DNA Extracted'       value={r.tissue.dna_extracted} />
-                    <Field label='RNA-seq'             value={r.tissue.rna_seq_available} />
-                    <Field label='Blocks Available'    value={r.tissue.blocks_available} />
-                    <Field label='PMI (hrs)'           value={r.tissue.postmortem_interval_hours} />
-                    <Field label='Spinal Cord'         value={r.tissue.spinal_cord_available} />
-                    <Field label='Olfactory Bulb'      value={r.tissue.olfactory_bulb_available} />
-                    <Field label='CSF'                 value={r.tissue.csf_available} />
-                    <Field label='Regions'             value={r.tissue.regions_sampled.join(', ')} />
+                    <Field label='Frozen'              value={r.FrozenTissueAvailable != null ? !!r.FrozenTissueAvailable : undefined} />
+                    <Field label='Frozen Quality'      value={r.FrozenTissueQuality} />
+                    <Field label='Freeze/Thaw'         value={r.FreezeThawTimes} />
+                    <Field label='FFPE'                value={r.FixedTissueAvailable != null ? !!r.FixedTissueAvailable : undefined} />
+                    <Field label='DNA Extracted'       value={r.DNAExtracted != null ? !!r.DNAExtracted : undefined} />
+                    <Field label='RNA-seq'             value={r.RNASeq != null ? !!r.RNASeq : undefined} />
+                    <Field label='PMI (hrs)'           value={r.PostmortemInterval} />
+                    <Field label='Spinal Cord'         value={r.SpinalCord != null ? !!r.SpinalCord : undefined} />
+                    <Field label='Olfactory Bulb'      value={r.OlfactoryBulb != null ? !!r.OlfactoryBulb : undefined} />
+                    <Field label='CSF'                 value={r.CSF != null ? !!r.CSF : undefined} />
+                    <Field label='Unstained Slides'    value={r.UnstainedSlidesAvailable != null ? !!r.UnstainedSlidesAvailable : undefined} />
                   </Section>
 
                 </div>

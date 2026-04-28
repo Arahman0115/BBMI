@@ -36,7 +36,7 @@ const QueryToolPageB: React.FC = () => {
   const navigate = useNavigate()
   const [chartsOpen,  setChartsOpen]  = useState(false)
   const [prefOpen,    setPrefOpen]    = useState(false)
-  const [selectedId,  setSelectedId]  = useState<number | undefined>()
+  const [selectedId,  setSelectedId]  = useState<string | undefined>()
   const { role } = useAuth()
   const { visible, toggle, setGroup, reset: resetCols } = useColumnPreferences()
 
@@ -49,9 +49,9 @@ const QueryToolPageB: React.FC = () => {
 
   const handleExportCSV = () => {
     if (!records.length) return
-    const headers = Object.keys(records[0]).filter(k => k !== 'tissue').join(',')
+    const headers = Object.keys(records[0]).filter(k => k !== 'diagnosis' && k !== 'slides').join(',')
     const rows = records.map(r =>
-      Object.entries(r).filter(([k]) => k !== 'tissue')
+      Object.entries(r).filter(([k]) => k !== 'diagnosis' && k !== 'slides')
         .map(([, v]) => `"${String(v ?? '').replace(/"/g, '""')}"`)
         .join(',')
     )
@@ -105,7 +105,7 @@ const QueryToolPageB: React.FC = () => {
               <span className='qpb-live-count'>{total.toLocaleString()} records</span>
             )}
             <div className='qpb-search-row'>
-              <button className='qpb-search-btn' onClick={search}>Search</button>
+              <button className='qpb-search-btn' onClick={() => { setSelectedId(undefined); search() }}>Search</button>
             </div>
           </div>
         </CollapsibleSidebar>
@@ -116,7 +116,7 @@ const QueryToolPageB: React.FC = () => {
               data={records}
               visibleColumns={visible}
               onOpenColumns={() => setPrefOpen(true)}
-              onRowClick={row => setSelectedId(prev => prev === row.id ? undefined : row.id)}
+              onRowClick={row => { if (!row._id) return; setSelectedId(prev => prev === row._id ? undefined : row._id) }}
               selectedId={selectedId}
               emptyMessage={hasSearched ? 'No records match these filters' : 'Set filters and press Search'}
               server={{ total, page, totalPages, perPage, loading,
@@ -148,7 +148,7 @@ const QueryToolPageB: React.FC = () => {
       )}
 
       <RecordDrawer
-        record={records.find(r => r.id === selectedId) ?? null}
+        record={selectedId != null ? (records.find(r => r._id === selectedId) ?? null) : null}
         onClose={() => setSelectedId(undefined)}
       />
 

@@ -23,7 +23,7 @@ const ageBins = (data: DonorRecord[]) => {
   const edges  = [0, 65, 70, 75, 80, 85, 90, Infinity]
   return labels.map((label, i) => ({
     label,
-    n: data.filter(r => r.age_at_death >= edges[i] && r.age_at_death < edges[i + 1]).length,
+    n: data.filter(r => (r.AgeAtDeath ?? 0) >= edges[i] && (r.AgeAtDeath ?? 0) < edges[i + 1]).length,
   })).filter(b => b.n > 0)
 }
 
@@ -68,12 +68,12 @@ const ChartsPanel: React.FC<Props> = ({ data }) => {
   }
 
   const ages   = ageBins(data)
-  const study  = countBy(data, r => r.study_source)
-  const sex    = countBy(data, r => r.sex)
-  const braak  = countBy(data, r => String(r.braak_stage)).sort((a, b) => Number(a.name) - Number(b.name))
-  const thal   = countBy(data, r => String(r.thal_phase)).sort((a, b) => Number(a.name) - Number(b.name))
-  const apoe   = countBy(data, r => `ε${r.apoe}`)
-  const mapt   = countBy(data, r => r.mapt)
+  const study  = countBy(data, r => r.StudySource ?? 'Unknown')
+  const sex    = countBy(data, r => r.Sex ?? 'Unknown')
+  const braak  = countBy(data, r => String(r.BraakStage ?? '?')).sort((a, b) => Number(a.name) - Number(b.name))
+  const thal   = countBy(data, r => String(r.ThalPhase ?? '?')).sort((a, b) => Number(a.name) - Number(b.name))
+  const apoe   = countBy(data, r => r.APOEGenotype ? `ε${r.APOEGenotype}` : 'Unknown')
+  const mapt   = countBy(data, r => r.MAPT ?? 'Unknown')
 
   const donut = (d: {name:string;value:number}[]) => (
     <>

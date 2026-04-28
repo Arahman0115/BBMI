@@ -9,15 +9,21 @@ function toParams(f: FilterState): URLSearchParams {
   if (f.ageRanges) p.set('ageRanges', f.ageRanges)
   if (f.sex) p.set('sex', f.sex)
   f.race?.forEach(v             => p.append('race',             v))
-  f.primaryDiagnosis?.forEach(v => p.append('primaryDiagnosis', v))
-  f.ad_type?.forEach(v          => p.append('ad_type',          v))
+  f.studySource?.forEach(v         => p.append('studySource',        v))
+  f.primaryDiagnosis?.forEach(v    => p.append('primaryDiagnosis',   v))
+  f.ad_type?.forEach(v             => p.append('ad_type',            v))
+  f.secondaryDiagnoses?.forEach(v  => p.append('secondaryDiagnoses', v))
   f.apoe?.forEach(v             => p.append('apoe',             v))
   f.mapt?.forEach(v             => p.append('mapt',             v))
   f.thalPhases?.forEach(v       => p.append('thalPhases',       String(v)))
   f.braakStages?.forEach(v      => p.append('braakStages',      String(v)))
   f.ceradScores?.forEach(v      => p.append('ceradScores',      v))
-  if (f.frozenOnly) p.set('frozenOnly', 'true')
-  if (f.ffpeOnly)   p.set('ffpeOnly',   'true')
+  f.tissueAvailable?.forEach(v => p.append('tissueAvailable', v))
+  if (f.diagnosisOrder) {
+    p.set('diagnosisOrderDx',  f.diagnosisOrder.diagnosis)
+    p.set('diagnosisOrderMin', String(f.diagnosisOrder.min))
+    p.set('diagnosisOrderMax', String(f.diagnosisOrder.max))
+  }
   return p
 }
 
@@ -32,7 +38,7 @@ export async function fetchSamples(
   filters: FilterState,
   page: number,
   limit: number,
-  sortBy = 'npid',
+  sortBy = 'NPID',
   sortDir: 'asc' | 'desc' = 'asc',
 ): Promise<SamplesResult> {
   const p = toParams(filters)

@@ -192,3 +192,59 @@ select {
   background-position: center;
 }
 
+
+/* ── Diagnosis order range ── */
+.filter-comp-select {
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 11.5px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.filter-comp-select:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
+}
+
+.filter-comp-select option {
+  background: #0e1419;
+  color: #c4cdd6;
+}
+
+.filter-range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-range-input {
+  width: 56px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  color: #c4cdd6;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-range-input:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
+}
+
+.filter-range-sep {
+  color: #3d4f5e;
+  font-size: 13px;
+}

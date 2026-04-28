@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FilterState, Sex, ApoeGenotype, MaptHaplotype, BraakStage, ThalPhase, AlzheimersType, CeradScore } from '../types'
 import MultiSelect, { MSOption } from './MultiSelect'
 import './FilterComp.css'
@@ -9,17 +9,36 @@ type Props = {
   onReset?: () => void
 }
 
-const SEX_OPTS:       MSOption<Sex>[]           = [{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }]
-const RACE_OPTS:      MSOption<string>[]         = [
+const SEX_OPTS:           MSOption<Sex>[]     = [{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }]
+const RACE_OPTS:          MSOption<string>[]  = [
   { value: 'White',                      label: 'White' },
   { value: 'Black or African American',  label: 'Black or African American' },
   { value: 'Asian',                      label: 'Asian' },
   { value: 'Hispanic or Latino',         label: 'Hispanic or Latino' },
 ]
-const DX_OPTS:        MSOption<string>[]         = [
-  { value: "Alzheimer's Disease",        label: "Alzheimer's Disease" },
-  { value: 'Mild Cognitive Impairment',  label: 'Mild Cognitive Impairment' },
-  { value: 'No Cognitive Impairment',    label: 'No Cognitive Impairment' },
+const STUDY_OPTS:         MSOption<string>[]  = [
+  { value: 'Florida ADC',           label: 'Florida ADC' },
+  { value: 'JHU ADC',               label: 'JHU ADC' },
+  { value: 'Knight ADRC',           label: 'Knight ADRC' },
+  { value: 'MCJD Brain Bank',       label: 'MCJD Brain Bank' },
+  { value: 'NIA ADC',               label: 'NIA ADC' },
+  { value: 'Stanford Brain Bank',   label: 'Stanford Brain Bank' },
+  { value: 'UC Davis ADRC',         label: 'UC Davis ADRC' },
+  { value: 'UF Brain Tissue Bank',  label: 'UF Brain Tissue Bank' },
+]
+const PRIMARY_DX_OPTS:    MSOption<string>[]  = [
+  { value: "Alzheimer's Disease",       label: "Alzheimer's Disease" },
+  { value: 'Mild Cognitive Impairment', label: 'Mild Cognitive Impairment' },
+  { value: 'No Cognitive Impairment',   label: 'No Cognitive Impairment' },
+]
+const SECONDARY_DX_OPTS:  MSOption<string>[]  = [
+  { value: 'FTLD-TDP Type A',           label: 'FTLD-TDP Type A' },
+  { value: 'GRN Mutation',              label: 'GRN Mutation' },
+  { value: 'Hippocampal Sclerosis',     label: 'Hippocampal Sclerosis' },
+  { value: 'Lewy Body Disease',         label: 'Lewy Body Disease' },
+  { value: 'Progressive Supranuclear Palsy', label: 'Progressive Supranuclear Palsy' },
+  { value: 'TDP-43 Proteinopathy',      label: 'TDP-43 Proteinopathy' },
+  { value: 'Vascular Pathology',        label: 'Vascular Pathology' },
 ]
 const AD_TYPE_OPTS:   MSOption<AlzheimersType>[] = [
   { value: 'Amnestic AD', label: 'Amnestic AD' },
@@ -39,12 +58,30 @@ const CERAD_OPTS:     MSOption<CeradScore>[]     = [
   { value: 'Moderate', label: 'Moderate' },
   { value: 'Frequent', label: 'Frequent' },
 ]
+const TISSUE_OPTS:    MSOption<string>[]          = [
+  { value: 'frozen',           label: 'Frozen Tissue' },
+  { value: 'ffpe',             label: 'Fixed Tissue (FFPE)' },
+  { value: 'unstained_slides', label: 'Unstained Slides' },
+  { value: 'spinal_cord',      label: 'Spinal Cord' },
+  { value: 'olfactory_bulb',   label: 'Olfactory Bulb' },
+  { value: 'csf',              label: 'CSF' },
+]
+
+const ALL_DX_OPTS = [...PRIMARY_DX_OPTS, ...SECONDARY_DX_OPTS]
 
 const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset }) => {
   const set = (patch: Partial<FilterState>) =>
     setFilterState(prev => ({ ...prev, ...patch }))
 
+  const [orderRange, setOrderRange] = useState('')
+  useEffect(() => {
+    if (!filterState.diagnosisOrder) setOrderRange('')
+  }, [filterState.diagnosisOrder])
+
   const showAdType = filterState.primaryDiagnosis?.includes("Alzheimer's Disease")
+  const availableSecondaryOpts = SECONDARY_DX_OPTS.filter(
+    opt => !(filterState.primaryDiagnosis ?? []).includes(opt.value)
+  )
 
   return (
     <div className='filter-comp-box'>
@@ -98,6 +135,13 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset }) =
           selected={filterState.race ?? []}
           onChange={v => set({ race: v.length ? v : undefined })}
         />
+
+        <MultiSelect<string>
+          placeholder='Study Source (any)'
+          options={STUDY_OPTS}
+          selected={filterState.studySource ?? []}
+          onChange={v => set({ studySource: v.length ? v : undefined })}
+        />
       </div>
 
       <div className='filter-section'>
@@ -105,7 +149,7 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset }) =
 
         <MultiSelect<string>
           placeholder='Primary Diagnosis (any)'
-          options={DX_OPTS}
+          options={PRIMARY_DX_OPTS}
           selected={filterState.primaryDiagnosis ?? []}
           onChange={v => set({ primaryDiagnosis: v.length ? v : undefined, ad_type: undefined })}
         />
@@ -116,6 +160,56 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset }) =
             options={AD_TYPE_OPTS}
             selected={filterState.ad_type ?? []}
             onChange={v => set({ ad_type: v.length ? v : undefined })}
+          />
+        )}
+
+        <MultiSelect<string>
+          placeholder='Secondary Diagnosis (any)'
+          options={availableSecondaryOpts}
+          selected={filterState.secondaryDiagnoses ?? []}
+          onChange={v => set({ secondaryDiagnoses: v.length ? v : undefined })}
+        />
+      </div>
+
+      <div className='filter-section'>
+        <span className='filter-section-label'>Diagnosis Order Range</span>
+        <div className='filter-group'>
+          <span className='filter-group-label'>Diagnosis</span>
+          <select
+            className='filter-comp-select'
+            value={filterState.diagnosisOrder?.diagnosis ?? ''}
+            onChange={e => {
+              const dx = e.target.value
+              if (!dx) { set({ diagnosisOrder: undefined }); setOrderRange(''); return }
+              const m = orderRange.match(/^(\d+)(?:\s*[-–]\s*(\d+))?$/)
+              const min = m ? Math.max(1, parseInt(m[1])) : 1
+              const max = m ? Math.max(min, parseInt(m[2] ?? m[1])) : 99
+              set({ diagnosisOrder: { diagnosis: dx, min, max } })
+            }}
+          >
+            <option value=''>Any diagnosis</option>
+            {ALL_DX_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        {filterState.diagnosisOrder?.diagnosis && (
+          <input
+            className='filter-comp-input'
+            placeholder='Order range e.g. 1-5'
+            value={orderRange}
+            onChange={e => {
+              const raw = e.target.value
+              setOrderRange(raw)
+              if (!raw.trim()) {
+                set({ diagnosisOrder: { diagnosis: filterState.diagnosisOrder!.diagnosis, min: 1, max: 99 } })
+                return
+              }
+              const m = raw.match(/^(\d+)(?:\s*[-–]\s*(\d+))?$/)
+              if (m) {
+                const min = Math.max(1, parseInt(m[1]))
+                const max = Math.max(min, parseInt(m[2] ?? m[1]))
+                set({ diagnosisOrder: { diagnosis: filterState.diagnosisOrder!.diagnosis, min, max } })
+              }
+            }}
           />
         )}
       </div>
@@ -174,20 +268,12 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset }) =
 
       <div className='filter-section'>
         <span className='filter-section-label'>Tissue</span>
-        <div className='filter-check-row'>
-          <label className='filter-check-label'>
-            <input type='checkbox'
-              checked={filterState.frozenOnly ?? false}
-              onChange={e => set({ frozenOnly: e.target.checked || undefined })} />
-            Frozen
-          </label>
-          <label className='filter-check-label'>
-            <input type='checkbox'
-              checked={filterState.ffpeOnly ?? false}
-              onChange={e => set({ ffpeOnly: e.target.checked || undefined })} />
-            FFPE
-          </label>
-        </div>
+        <MultiSelect<string>
+          placeholder='Tissue availability (any)'
+          options={TISSUE_OPTS}
+          selected={filterState.tissueAvailable ?? []}
+          onChange={v => set({ tissueAvailable: v.length ? v : undefined })}
+        />
       </div>
 
     </div>

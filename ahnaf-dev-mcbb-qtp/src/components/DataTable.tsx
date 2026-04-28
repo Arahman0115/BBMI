@@ -20,16 +20,16 @@ const braakColor = (s: number) => s >= 5 ? 'high' : s >= 3 ? 'mid' : 'low'
 const thalColor  = (p: number) => p >= 4 ? 'high' : p >= 2 ? 'mid' : 'low'
 
 const CUSTOM_CELLS: Partial<Record<ColumnKey, (row: DonorRecord) => React.ReactNode>> = {
-  braak_stage: r => (
-    <span className={`dt-badge dt-badge--${braakColor(r.braak_stage)}`}>{r.braak_stage}</span>
+  BraakStage: r => (
+    <span className={`dt-badge dt-badge--${braakColor(r.BraakStage ?? 0)}`}>{r.BraakStage ?? '—'}</span>
   ),
-  thal_phase: r => (
-    <span className={`dt-badge dt-badge--${thalColor(r.thal_phase)}`}>{r.thal_phase}</span>
+  ThalPhase: r => (
+    <span className={`dt-badge dt-badge--${thalColor(r.ThalPhase ?? 0)}`}>{r.ThalPhase ?? '—'}</span>
   ),
-  frozen_available: r => r.tissue.frozen_available
+  FrozenTissueAvailable: r => r.FrozenTissueAvailable
     ? <span className='dt-pill dt-pill--frozen'>Frozen</span>
     : <span className='dt-dim'>—</span>,
-  ffpe_available: r => r.tissue.ffpe_available
+  FixedTissueAvailable: r => r.FixedTissueAvailable
     ? <span className='dt-pill dt-pill--ffpe'>FFPE</span>
     : <span className='dt-dim'>—</span>,
 }
@@ -49,7 +49,7 @@ type Props = {
   visibleColumns: Record<ColumnKey, boolean>
   onOpenColumns: () => void
   onRowClick?: (row: DonorRecord) => void
-  selectedId?: number
+  selectedId?: string
   emptyMessage?: string
   server?: ServerSideProps
 }
@@ -122,7 +122,7 @@ const DataTable: React.FC<Props> = ({
           pointerOnHover
           onRowClicked={(row: DonorRecord) => onRowClick?.(row)}
           conditionalRowStyles={[{
-            when: (row: DonorRecord) => row.id === selectedId,
+            when: (row: DonorRecord) => row._id === selectedId,
             style: { background: 'rgba(0, 104, 177, 0.10) !important' },
           }]}
           noDataComponent={<span className='dt-empty'>{emptyMessage}</span>}

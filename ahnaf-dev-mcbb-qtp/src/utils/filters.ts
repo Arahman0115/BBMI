@@ -9,33 +9,74 @@ const parseAgeRanges = (input: string) =>
     })
     .filter(Boolean) as { min: number; max: number }[]
 
+const primaryDx   = (r: DonorRecord) => r.diagnosis?.find(d => d.DiagnosisOrder === 1)?.DiseaseCategory ?? null
+const secondaryDxList = (r: DonorRecord) =>
+  r.diagnosis?.filter(d => (d.DiagnosisOrder ?? 0) > 1).map(d => d.DiseaseCategory).filter((v): v is string => !!v) ?? []
+
 export const applyFilters = (records: DonorRecord[], f: FilterState): DonorRecord[] =>
   records.filter(r => {
     if (f.idSearch) {
       const q = f.idSearch.toLowerCase()
       const match =
-        r.npid?.toLowerCase().includes(q) ||
-        r.autopsy_id?.toLowerCase().includes(q) ||
-        String(r.id).includes(q) ||
-        (r.mayo_clinic_id?.toLowerCase().includes(q) ?? false) ||
-        (r.truncated_mayo_clinic_id?.toLowerCase().includes(q) ?? false) ||
-        (r.nacc_ptid?.toLowerCase().includes(q) ?? false)
+        r.NPID?.toLowerCase().includes(q) ||
+        r.AutopsyID?.toLowerCase().includes(q) ||
+        r.ID?.toLowerCase().includes(q) ||
+        (r.MayoClinicID?.toLowerCase().includes(q) ?? false) ||
+        (r.TruncatedMayoClinicID?.toLowerCase().includes(q) ?? false) ||
+        (r.NACCPtid?.toLowerCase().includes(q) ?? false)
       if (!match) return false
     }
-    if (f.sex && r.sex !== f.sex) return false
-    if (f.race?.length && !f.race.includes(r.race)) return false
-    if (f.primaryDiagnosis?.length && !f.primaryDiagnosis.includes(r.primary_diagnosis)) return false
-    if (f.ad_type?.length && r.ad_type && !f.ad_type.includes(r.ad_type)) return false
-    if (f.apoe?.length && !f.apoe.includes(r.apoe)) return false
-    if (f.mapt?.length && !f.mapt.includes(r.mapt)) return false
+
+    if (f.sex && r.Sex !== f.sex) return false
+    if (f.race?.length && (!r.Race || !f.race.includes(r.Race))) return false
+    if (f.studySource?.length && (!r.StudySource || !f.studySource.includes(r.StudySource))) return false
+
+    if (f.primaryDiagnosis?.length) {
+      const pdx = primaryDx(r)
+      if (!pdx || !f.primaryDiagnosis.includes(pdx)) return false
+    }
+
+    if (f.secondaryDiagnoses?.length) {
+      const sdx = secondaryDxList(r)
+      if (!f.secondaryDiagnoses.some(dx => sdx.includes(dx))) return false
+    }
+
+    if (f.ad_type?.length) {
+      const primaryEntry = r.diagnosis?.find(d => d.DiagnosisOrder === 1)
+      if (!primaryEntry?.DiseaseSubtype || !f.ad_type.includes(primaryEntry.DiseaseSubtype as any)) return false
+    }
+
+    if (f.apoe?.length && (!r.APOEGenotype || !f.apoe.includes(r.APOEGenotype as any))) return false
+    if (f.mapt?.length && (!r.MAPT || !f.mapt.includes(r.MAPT as any))) return false
+
     if (f.ageRanges) {
       const ranges = parseAgeRanges(f.ageRanges)
-      if (ranges.length > 0 && !ranges.some(r2 => r.age_at_death >= r2.min && r.age_at_death <= r2.max)) return false
+      const age = r.AgeAtDeath ?? 0
+      if (ranges.length > 0 && !ranges.some(r2 => age >= r2.min && age <= r2.max)) return false
     }
-    if (f.braakStages?.length && !f.braakStages.includes(r.braak_stage)) return false
-    if (f.thalPhases?.length && !f.thalPhases.includes(r.thal_phase)) return false
-    if (f.ceradScores?.length && r.cerad_np && !f.ceradScores.includes(r.cerad_np)) return false
-    if (f.frozenOnly && !r.tissue.frozen_available) return false
-    if (f.ffpeOnly && !r.tissue.ffpe_available) return false
+
+    if (f.braakStages?.length && !f.braakStages.includes(r.BraakStage as any)) return false
+    if (f.thalPhases?.length  && !f.thalPhases.includes(r.ThalPhase as any))   return false
+    if (f.ceradScores?.length && r.CERADNP && !f.ceradScores.includes(r.CERADNP as any)) return false
+
+    if (f.diagnosisOrder) {
+      const { diagnosis, min, max } = f.diagnosisOrder
+      const entry = r.diagnosis?.find(d => d.DiseaseCategory === diagnosis)
+      if (!entry || entry.DiagnosisOrder == null) return false
+      if (entry.DiagnosisOrder < min || entry.DiagnosisOrder > max) return false
+    }
+
+    if (f.tissueAvailable?.length) {
+      const checks: Record<string, boolean> = {
+        frozen:           !!(r.FrozenTissueAvailable),
+        ffpe:             !!(r.FixedTissueAvailable),
+        unstained_slides: !!(r.UnstainedSlidesAvailable),
+        spinal_cord:      !!(r.SpinalCord),
+        olfactory_bulb:   !!(r.OlfactoryBulb),
+        csf:              !!(r.CSF),
+      }
+      if (!f.tissueAvailable.every(t => checks[t])) return false
+    }
+
     return true
   })
