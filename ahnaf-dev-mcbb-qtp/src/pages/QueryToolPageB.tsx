@@ -32,11 +32,20 @@ const ExportIcon = () => (
   </svg>
 )
 
+const ColumnsIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+    <rect x="2"  y="3" width="4" height="14" rx="1" />
+    <rect x="8"  y="3" width="4" height="14" rx="1" />
+    <rect x="14" y="3" width="4" height="14" rx="1" />
+  </svg>
+)
+
 const QueryToolPageB: React.FC = () => {
   const navigate = useNavigate()
-  const [chartsOpen,  setChartsOpen]  = useState(false)
-  const [prefOpen,    setPrefOpen]    = useState(false)
-  const [selectedId,  setSelectedId]  = useState<string | undefined>()
+  const [chartsOpen,     setChartsOpen]     = useState(false)
+  const [prefOpen,       setPrefOpen]       = useState(false)
+  const [filtersExpanded, setFiltersExpanded] = useState(false)
+  const [selectedId,     setSelectedId]     = useState<string | undefined>()
   const { role } = useAuth()
   const { visible, toggle, setGroup, reset: resetCols } = useColumnPreferences()
 
@@ -49,11 +58,42 @@ const QueryToolPageB: React.FC = () => {
 
   const handleExportCSV = () => {
     if (!records.length) return
-    const headers = Object.keys(records[0]).filter(k => k !== 'diagnosis' && k !== 'slides').join(',')
-    const rows = records.map(r =>
-      Object.entries(r).filter(([k]) => k !== 'diagnosis' && k !== 'slides')
-        .map(([, v]) => `"${String(v ?? '').replace(/"/g, '""')}"`)
-        .join(',')
+    const gene = (r: import('../types').DonorRecord, marker: string) =>
+      r.genetics?.find(g => g.marker === marker)?.value ?? ''
+    const flatten = (r: import('../types').DonorRecord) => ({
+      npid:               r.npid ?? '',
+      sex:                r.demographics?.sex ?? '',
+      race:               r.demographics?.race ?? '',
+      age_at_death:       r.demographics?.ageAtDeath ?? '',
+      state_of_origin:    r.intake?.stateOfOrigin ?? '',
+      clinical_diagnosis: r.clinical?.clinicalDiagnosis?.map(d => d.diagnosis).filter(Boolean).join('; ') ?? '',
+      family_history:     r.clinical?.familyHistory ?? '',
+      primary_dx:         r.diagnosis?.find(d => d.order === 1)?.category ?? '',
+      primary_subtype:    r.pathology?.adSubtype ?? '',
+      secondary_dx:       r.diagnosis?.filter(d => (d.order ?? 0) > 1).map(d => d.category).join('; ') ?? '',
+      braak_stage:        r.pathology?.braakStage ?? '',
+      thal_phase:         r.pathology?.thalPhase ?? '',
+      cerad:              r.pathology?.ceradNp ?? '',
+      nia_reagan:         r.pathology?.niaReaganScore ?? '',
+      apoe_genotype:      gene(r, 'APOE'),
+      mapt:               gene(r, 'MAPT'),
+      gba:                gene(r, 'GBA'),
+      grn:                gene(r, 'GRN'),
+      frozen:             r.tissue?.frozenAvailable ?? '',
+      ffpe:               r.tissue?.fixedAvailable ?? '',
+      dna_extracted:      r.tissue?.dnaExtracted ?? '',
+      rna_seq:            r.tissue?.rnaSeq ?? '',
+      spinal_cord:        r.tissue?.spinalCord ?? '',
+      olfactory_bulb:     r.tissue?.olfactoryBulb ?? '',
+      csf:                r.tissue?.csf ?? '',
+      pmi_hours:          r.tissue?.postmortemInterval ?? '',
+      brain_source:       r.intake?.brainSource ?? '',
+      study_source:       r.intake?.studySource ?? '',
+    })
+    const flat    = records.map(flatten)
+    const headers = Object.keys(flat[0]).join(',')
+    const rows    = flat.map(f =>
+      Object.values(f).map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')
     )
     const blob = new Blob([[headers, ...rows].join('\n')], { type: 'text/csv' })
     const url  = URL.createObjectURL(blob)
@@ -65,6 +105,11 @@ const QueryToolPageB: React.FC = () => {
   }
 
   const actions = [
+    {
+      icon: <ColumnsIcon />,
+      label: 'Columns',
+      onClick: () => setPrefOpen(true),
+    },
     {
       icon: <ChartIcon />,
       label: chartsOpen ? 'Hide Charts' : 'Create Charts',
@@ -86,7 +131,7 @@ const QueryToolPageB: React.FC = () => {
         <NavBar />
         <img src={`${import.meta.env.BASE_URL}logo_mayo.svg`} alt='Mayo Clinic' className='header-logo' />
         <div className='header-divider' />
-        <h1 className='qp-title'>Query Tool <span className='qpb-badge'>B</span></h1>
+        <h1 className='qp-title'>Query Tool</h1>
         <div className='header-spacer' />
         <button className='header-logout' onClick={() => signOut(auth).then(() => navigate('/login'))}>
           <svg width='15' height='15' viewBox='0 0 20 20' fill='currentColor'>
@@ -99,15 +144,14 @@ const QueryToolPageB: React.FC = () => {
 
       <div className='query-tool-page-body'>
         <CollapsibleSidebar>
-          <FilterComp filterState={pendingFilters} setFilterState={setPendingFilters} onReset={reset} />
-          <div className='qpb-search-footer'>
-            {hasSearched && (
+          <FilterComp filterState={pendingFilters} setFilterState={setPendingFilters} onReset={reset}
+            onSearch={() => { setSelectedId(undefined); search() }}
+            onExpand={() => setFiltersExpanded(true)} />
+          {hasSearched && (
+            <div className='qpb-search-footer'>
               <span className='qpb-live-count'>{total.toLocaleString()} records</span>
-            )}
-            <div className='qpb-search-row'>
-              <button className='qpb-search-btn' onClick={() => { setSelectedId(undefined); search() }}>Search</button>
             </div>
-          </div>
+          )}
         </CollapsibleSidebar>
 
         <div className='qpb-content-area'>
@@ -115,7 +159,6 @@ const QueryToolPageB: React.FC = () => {
             <DataTable
               data={records}
               visibleColumns={visible}
-              onOpenColumns={() => setPrefOpen(true)}
               onRowClick={row => { if (!row._id) return; setSelectedId(prev => prev === row._id ? undefined : row._id) }}
               selectedId={selectedId}
               emptyMessage={hasSearched ? 'No records match these filters' : 'Set filters and press Search'}
@@ -125,6 +168,30 @@ const QueryToolPageB: React.FC = () => {
           </div>
           <ActionPanel actions={actions} />
         </div>
+
+        {filtersExpanded && (
+          <div className='qpb-charts-backdrop' onClick={() => setFiltersExpanded(false)}>
+            <div className='qpb-filters-modal' onClick={e => e.stopPropagation()}>
+              <div className='qpb-charts-modal-header'>
+                <span className='qpb-charts-modal-title'>Filters</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {hasSearched && <span className='qpb-live-count' style={{ fontSize: 10 }}>{total.toLocaleString()} records</span>}
+                  <button className='qpb-search-btn' style={{ padding: '5px 16px', fontSize: 11 }}
+                    onClick={() => { setSelectedId(undefined); search(); setFiltersExpanded(false) }}>
+                    Search
+                  </button>
+                  <button className='qpb-charts-close' onClick={() => setFiltersExpanded(false)}>✕</button>
+                </div>
+              </div>
+              <div className='qpb-filters-modal-body'>
+                <FilterComp
+                  filterState={pendingFilters} setFilterState={setPendingFilters}
+                  onReset={reset} expanded
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {chartsOpen && (
           <div className='qpb-charts-backdrop' onClick={() => setChartsOpen(false)}>

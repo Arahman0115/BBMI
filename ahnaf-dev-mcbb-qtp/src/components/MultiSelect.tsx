@@ -11,10 +11,11 @@ type Props<T extends string | number> = {
   options: MSOption<T>[]
   selected: T[]
   onChange: (vals: T[]) => void
+  closeOnSelect?: boolean
 }
 
 function MultiSelect<T extends string | number>({
-  placeholder, options, selected, onChange,
+  placeholder, options, selected, onChange, closeOnSelect,
 }: Props<T>) {
   const [query, setQuery] = useState('')
   const [open,  setOpen]  = useState(false)
@@ -38,6 +39,7 @@ function MultiSelect<T extends string | number>({
     } else {
       onChange([...selected, val])
     }
+    if (closeOnSelect) { setOpen(false); setQuery('') }
   }
 
   const selectedOpts = selected

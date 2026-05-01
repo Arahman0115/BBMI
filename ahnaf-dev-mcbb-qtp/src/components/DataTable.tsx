@@ -21,15 +21,19 @@ const thalColor  = (p: number) => p >= 4 ? 'high' : p >= 2 ? 'mid' : 'low'
 
 const CUSTOM_CELLS: Partial<Record<ColumnKey, (row: DonorRecord) => React.ReactNode>> = {
   BraakStage: r => (
-    <span className={`dt-badge dt-badge--${braakColor(r.BraakStage ?? 0)}`}>{r.BraakStage ?? '—'}</span>
+    <span className={`dt-badge dt-badge--${braakColor(r.pathology?.braakStage ?? 0)}`}>
+      {r.pathology?.braakStage ?? '—'}
+    </span>
   ),
   ThalPhase: r => (
-    <span className={`dt-badge dt-badge--${thalColor(r.ThalPhase ?? 0)}`}>{r.ThalPhase ?? '—'}</span>
+    <span className={`dt-badge dt-badge--${thalColor(r.pathology?.thalPhase ?? 0)}`}>
+      {r.pathology?.thalPhase ?? '—'}
+    </span>
   ),
-  FrozenTissueAvailable: r => r.FrozenTissueAvailable
+  FrozenTissueAvailable: r => r.tissue?.frozenAvailable
     ? <span className='dt-pill dt-pill--frozen'>Frozen</span>
     : <span className='dt-dim'>—</span>,
-  FixedTissueAvailable: r => r.FixedTissueAvailable
+  FixedTissueAvailable: r => r.tissue?.fixedAvailable
     ? <span className='dt-pill dt-pill--ffpe'>FFPE</span>
     : <span className='dt-dim'>—</span>,
 }
@@ -47,7 +51,6 @@ type ServerSideProps = {
 type Props = {
   data: DonorRecord[]
   visibleColumns: Record<ColumnKey, boolean>
-  onOpenColumns: () => void
   onRowClick?: (row: DonorRecord) => void
   selectedId?: string
   emptyMessage?: string
@@ -55,7 +58,7 @@ type Props = {
 }
 
 const DataTable: React.FC<Props> = ({
-  data, visibleColumns, onOpenColumns, onRowClick, selectedId,
+  data, visibleColumns, onRowClick, selectedId,
   emptyMessage = 'No records match the current filters',
   server,
 }) => {
@@ -109,7 +112,6 @@ const DataTable: React.FC<Props> = ({
           <select className='dt-perpage' value={perPage} onChange={e => changePerPage(Number(e.target.value))}>
             {PER_PAGE_OPTIONS.map(n => <option key={n} value={n}>{n} rows</option>)}
           </select>
-          <button className='dt-columns-btn' onClick={onOpenColumns}>Columns</button>
         </div>
       </div>
       <div className={`dt-scroll${loading ? ' dt-loading' : ''}`}>

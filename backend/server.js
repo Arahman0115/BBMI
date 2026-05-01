@@ -4,40 +4,29 @@ const mongoose    = require('mongoose')
 const cors        = require('cors')
 const verifyToken = require('./middleware/auth')
 const loadRole    = require('./middleware/loadRole')
-const mongoAdapter = require('./db/mongoAdapter')
-const buildPhpAdapter = require('./db/phpAdapter')
 
 const samplesRouter = require('./routes/samples')
 const usersRouter   = require('./routes/users')
 const adminRouter   = require('./routes/admin')
 
+const isProd = process.env.NODE_ENV === 'production'
+
 const app = express()
-app.use(cors())
+if (isProd) app.set('trust proxy', 1)
+if (!isProd) app.use(cors())
 app.use(express.json())
 
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.DATABASE_URL, { serverSelectionTimeoutMS: 5000 })
-    console.log('[db] Connected to MongoDB')
-    app.locals.db = mongoAdapter
-  } catch (err) {
-    console.warn(`[db] MongoDB unavailable (${err.message})`)
-    const phpPath = process.env.PHP_DB_PATH
-    if (!phpPath) {
-      console.error('[db] PHP_DB_PATH not set — cannot start without a database')
-      process.exit(1)
-    }
-    app.locals.db = buildPhpAdapter(phpPath)
-  }
+mongoose.connect(process.env.DATABASE_URL)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err))
 
-  app.use('/api', verifyToken)
-  app.use('/api', loadRole)
-  app.use('/api/samples', samplesRouter)
-  app.use('/api/users',   usersRouter)
-  app.use('/api/admin',   adminRouter)
+app.use('/api', verifyToken)
+app.use('/api', loadRole)
 
-  const PORT = process.env.PORT || 3000
-  app.listen(PORT, () => console.log(`[api] Running on http://localhost:${PORT}`))
-}
+app.use('/api/samples', samplesRouter)
+app.use('/api/users',   usersRouter)
+app.use('/api/admin',   adminRouter)
 
-startServer()
+const PORT = process.env.PORT || 3000
+const HOST = isProd ? '127.0.0.1' : 'localhost'
+app.listen(PORT, HOST, () => console.log(`API running on http://${HOST}:${PORT}`))

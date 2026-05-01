@@ -1,0 +1,695 @@
+PRIMARY DIAGNOSIS (pathdx) / ANY DIAGNOSIS EXCEPT 1ST (pathdx2) / DIAGNOSIS RANGE (pathdx3)
+----------------------------------------------------------------------------------------------
+Note: all three diagnosis dropdowns share the same option list below.
+
+3R Tauopathy
+4R Tauopathy
+aALB
+abscess
+acquired hepatocerebral degeneration
+Acute Disseminated Encephalomyelitis
+Acute myeloblastic leukemia
+AD NFT type
+Adult polyglucosan body disease
+AGD-like
+AGD-like tau
+Aging-Related Tau Astrogliopathy (ARTAG)
+agonal changes
+agonal hypoxia
+ALB
+ALB vTLBD
+ALB=9
+ALD variant
+Alobar holoprosencephaly
+Alport
+ALS status post mesenchymal stem cell Rx/ PART
+ALS TDP-43 Type E/ AGD/SRT/ PART
+ALS-FET
+ALS-FUS
+ALS-SOD1
+Alzheimer's Disease (AD)
+Amyg s LBs
+amygdala necrosis
+Amygdala Sclerosis (AmygScl)
+amygdalo-striato-thalamo-tectal degeneration
+amyloidosis
+Amyotrophic Lateral Sclerosis (ALS)
+and degen
+Aneurysm
+Angioma
+anomalous fiber tracts
+Anoxia
+Anoxia herniation encephalitis
+Anoxic
+anoxic changes
+Anoxic enceph
+Anoxic encephal
+Anoxic encephalopathy
+anoxic leukoencephalopathy
+Anoxic-ischemic encephalopathy
+anterior commissure degen
+APP anoxic
+APP+ axonal injury
+APP+ Leukoencephalopathy
+aqueductal gliosis
+Aqueductal Stenosis
+Arachnoid Cyst
+Arachnoid fibrosis
+Arachnoid Fibrosis
+Argyrophilic Grain Disease (AGD)
+Arnold Chiari Malformation
+Arnold Chiari Malformation Type 1
+ARTAG with Thorn-shaped astrocyte (TSA)
+Arteriolosclerosis (VaD)
+Arteriolosclerotic Small Vessel Disease (ASVD)
+Arteriolosclerotic Vascular Disease
+arteriopathy
+Arteriovenous malformation
+Aspergillosis
+Aspergillus Encephalitis
+Aspergillus Meningitis
+Astrocytoma
+aSyn-neg-pale bodies
+Ataxia telangiectasia
+Atherosclerosis
+ATP
+Atrophy
+Autism
+Autolysis
+axonal spheroids
+bacterial
+Bacterial growth
+Bacterial meningitis
+ballooned neurons
+band
+band heterotopia
+basilar thrombosis
+basophilic
+Basophilic inclusion body disease (BIBD)
+Bergmann RF
+Berry aneurysm
+Binswanger's disease
+BLBD
+both Thal- and pallid-otomies
+brain abscesses
+Brain B-cell lymphoma
+Brain dead anoxic encephalopathy
+Brain Death
+brain hernation due to SDH
+brain nevi
+brain purpura
+brain trauma
+brain tumor
+c
+c9ALS
+Ca
+CA2 Scl
+CA3 Scl
+calcification
+calcospherites
+callosal necrosis
+Candida meningitis
+Candida ventriculitis
+Carcinomatosis
+Carcinomatous meningitis
+Carcinomatous ventriculitis
+cardiac a-synuclein
+cardiac amyloid
+cavernoma
+cavernous angioma
+cavernous malformation
+CBD astrocytic plaques
+CBD-like 4R tauopathy
+CBT& degen
+CD20 leukemoid
+Central neurocytoma
+Central Pontine Myelinolysis (CPM)
+Cerebellar Sclerosis (CblScl)
+Cerebral Amyloid Angiopathy (CAA)
+Cerebral Autosomal Dominant Arteriopathy with Subcortical Infarcts and Leukoencephalopathy (CADASIL)
+cerebritis
+Cerebritis
+Cerebrovascular Accident (CVA)
+ceroid
+CGP
+Charcot-Bouchard aneurysm
+Charles Bonnet syndrome
+Chronic lymphocytic leukemia
+Chronic Traumatic Encephalopathy (CTE)
+CJD / PART
+CN axonal dystophy
+coarse grain plaques
+Cockayne
+Coffin-Lowry
+collagenosis
+congenital aqueductal stenosis
+Congenital disorder of glycosylation
+congenital malformation
+Contusion
+corpora amylacea
+Corticobasal Degeneration (CBD)
+corticobulbar
+COVID-19 Encephalitis
+Creutzfeldt-Jakob Disease (CJD)
+CTE features
+CTE-like
+CVA status post meningioma
+CVA Thal
+CVAs and CVD
+cyst
+DBS
+DBS encephalomalacia
+DBS for ET
+DBS-like
+deafness
+Degeneration
+dementia
+dementia unknown etiology
+demyelination
+denervation atrophy
+dentate neuronophagia
+depressive pseudodementia
+Diabetes
+Diffuse axonal injury
+Disproportionately Enlarged Subarachnoid Hydrocephalus (DESH)
+DLBD
+DNET
+DNT
+dolichoectasia
+drug overdose
+dural sinus thromboses
+Duret Hemorrhage
+dysgenesis
+Dysmyelinating leukoencephalopathy
+dysplasia
+dystonia
+edema
+embalming artifacts
+emboli
+emperipolesis
+Encephalitis
+Encephalomalacia
+Encephalomyelitis
+Encephalopathy
+Endendymitis
+endovascular foreign body granulomas
+eosinophilic perivasculitis
+Ependymitis
+Ependymoma
+Fahr typoe Ca
+Fahr-like
+Fahr's Disease
+falx lipoma
+Familial ALS
+FCD Type IIb
+Fe++
+features of CTE
+fetal transplant
+FPT
+Friedreich's ataxia
+frontal ICH
+frontal leukoencephalopathy
+Frontal variant
+Frontotemporal Lobar Degeneration (FTLD)
+FTDP with grains
+FTLD-ALS
+FTLD-BIBD
+FTLD-FUS
+FTLD-MND
+FTLD-PLS
+FTLD-SOD
+FTLD-tau
+FTLD-Tau with MAPT mutation (FTDP-17)
+FTLD-TDP
+FTLD-TDP / PART/berry aneurysm
+FTLD-TDP temporal
+FTLD-TDP with MND
+FTLD-U
+Fungal cerebritis
+Ganglioglioma
+Ganglioneuroma
+GCT
+Gerstmann-Straussler-Scheinker Disease (GSS)
+giant aneurysm
+Giant cell glioblastoma
+glial hamartoma
+Glioblastoma (GBM)
+gliomatosis
+gliomatosis cerebri
+Gliosarcoma
+Gliosis
+Globular Glial Tauopathy (GGT)
+gracile deg
+gracile degen
+gracile spheroids
+granular ependymitis
+granulomas
+granulomatous angiitis
+Guillain-Barre
+HAM
+head trauma
+hem
+hem CVA
+hem. CVA
+hemachromatosis
+Hemangioblastoma
+Hemangioma
+Hemi-megalencephaly
+hemosiderosis
+hepatocerebral
+hepatocerebral degen
+Hereditary Diffuse Leukoencephalopathy with Spheroids (HDLS)
+Herniation
+Herpes Simplex Virus Encephalitis
+Heterotopia
+Hippocampal Sclerosis (HpScl)
+Histiocytosis
+holoprosencephaly
+HpScl -4
+HpScl tauopathy
+HpScl with TDP-43
+HSP
+Huntington's Disease
+Hx spinal stenosis
+hyaline
+hyaline LB
+Hydrocephalus
+hydrocephalus ex vacuo
+hygroma
+hypoplasia
+hypothal CMV
+hypothalamic tau
+hypoxia
+ICH due to GSW
+ICH IVH SAH
+ICH pos
+ILBD
+Incipient encephalitis
+Infant brain
+Infantile SMA
+Inferior Olivary Hypertrophy (IOH)
+inflammation
+infundibular lipoma
+intra-tumor hematoma
+Intracranial hematoma
+Intracranial hemorrhage
+Intranuclear Hyaline Inclusion Disease (INHID)
+intravascular bacteria
+Intravascular lymphoma
+Intraventricular Hemorrhage (IVH)
+IO gliosis RF
+IOH PART
+iron
+iron pigment
+ischemia
+ischemic AmygScl
+ischemic gemistrocytosis
+ischemic HpScl
+Ischemic infarct
+KLHL11 autoimmune encephalitis
+Kluver-Bucy
+Kuf's
+lac
+Lac
+lacs
+lacunar infarcts
+Lacune
+laminar
+laminar CtxScl
+laminar necrosis
+LB
+LB AD
+LB PD
+LB-like
+LBLHI
+Leigh's syndrome
+lesion
+leuk
+Leukemic meningitis
+leuko
+leuko sent to CDC Prion
+leukoaraiosis
+leukocytoclastic microangiopathy
+leukocytosis
+Leukoencephalopathy
+leukoencephalopathy spheroids
+leukomalacia
+Lewy Body Disease (LBD)
+Lewy like inclusions
+Lewy-like NCI
+Limbic
+Limbic-predominant Age-related TDP-43 Encephalopathy (LATE)
+lipohyalinosis
+lipoma
+LN
+long neurites
+Lubag
+Lyme
+lymphoid hyperplasia
+M
+malformation
+MCA thrombosis
+MCD
+MCI
+mega-corpus callosum
+melanosis cerebelli
+MELAS
+membrane
+membrane a
+Meningioma
+Meningitis
+meningitis c pigment
+meningoencephalitis
+Meningoencephalitis
+meningomyelocele
+Metastatic adenocarcinoma
+Metastatic breast cancer
+Metastatic cancer
+Metastatic colon cancer
+Metastatic lymphoma
+Metastatic melanoma
+Metastic carcinoma
+MGN encephalitis
+MI-MTR
+micro-CVA
+micro-CVAs
+microabscess
+microabscesses
+microadenoma
+microcystic neuroglial tumor
+microglial nodule encephalitis
+microgliosis
+Microhemorrhage
+Microinfarct
+Micrometastatic cancer
+microthrombi
+microvacuolation
+microvasculopathy with dystrophic calcification
+Mixed dementia
+mixed myopathy
+mixed neurodegenerative disease
+mixed PrP lesions
+MN
+Motor neuron disease
+MR
+MSA / PA
+MSA / PART
+MSA frontobulbar degen
+MSA NFT-like
+MSA w
+MSA-C
+MSA-P
+MSD
+MST
+MTA
+MTL sclerosis
+MTR path
+MTS
+Mucormycosis
+mulitofocal leukoencephalopathy with pigmented glia
+multi-infarct
+multi-infarct dementia
+multifocal hemorrhages
+Multifocal inflammatory leukoencephalopathy
+Multifocal leukoencephalopathy
+Multinucleated giant cell response
+Multiple Sclerosis (MS)
+Multiple System Atrophy (MSA)
+muscle atrophy
+mycotic aneurysm
+Mycotic basilar arteritis
+myelinolysis
+myelitis
+myelopathy
+NBIA
+nbM
+NFT
+NCI
+NCI in necrosis
+necrotic corpus callosum tumor
+neurogenic atrophy
+neuroma
+Neuronal ceroid lipofuscinosis
+Neuronal intermediate fillament inclusion disease (NIFID)
+neuropathy
+NFID-ANXA11
+NFT only
+NFT PART
+NFTD
+nigral NFT
+nigral-Lyusian atrophy
+nigrolyusial degeneration
+NIHID
+NLA
+no CTE
+no inclusions (FTLD-ni)
+No neurodegenerative changes
+No report issued
+non-prion spongioform encephalopathy
+Normal mitochondrial
+normal muscle
+Normal Pressure Hydrocephalus (NPH)
+not CTE
+Not evaluated at MCJ
+not in SoftPath
+obliterative vasculopathy
+OG
+Oligodendroglioma
+olivary gliosis
+olive Rosenthal
+Olivopontocerebellar atrophy (OPCA)
+OPCA>=SND
+OPCA>SND
+optic
+Optic Atrophy (OA)
+Optic Atrophy (OA) with LGN degeneration
+P62-negative
+pachymeningitis with MG cells
+PALATE
+Pallido-nigro-luysial atrophy (PNLA)
+pallidoluysial degen
+Pallidonigral degeneration
+Pallidonigral degeneration Perry's Disease
+pallidonigral PSD
+pallidotomy
+Pan- degeneration
+Paraneoplastic
+Parkinson's disease (PD)
+Parkinsonism-Dementia Complex of Guam (PDC)
+Pathological Aging (PA)
+PCA
+PDC
+PEP
+peripheral nerve NSP
+perivasculities
+perivasculitis
+Periventricular heterotopia
+periventriculitis
+Perry's Disease
+petechia
+Pick body like inclusion
+Pick body like NFT
+Pick's Disease
+pigment
+Pigment-Spheroid Degeneration (PSD)
+pineal cyst
+pineal hematoma
+Pituitary Adenoma
+pituitary amyloid
+pituitary apoplexy
+pituitary atrophy
+pituitary infarct
+pituitary infarcts
+Pituitary Microadenoma
+pituitary sclerosis
+plaque-like calcification
+plaques
+plasma cell meningitis
+PLS-FUS
+PLS-like
+PNLA-like
+polio
+Poliomyelitis
+Polyglucosan Body Disease
+Polygyria
+polymer emboli
+polymicrogyria
+pontie hemorrhage
+pontine CVA
+pontine glioma
+pontine hematoma
+possibleSRT
+post column degen
+post surg CPA
+post-op CVA
+post-polio
+post-surgical defect
+PPND
+PPRN octatpeptide repeat
+preamyloid
+PRP plaques
+Primary Age-Related Tauopathy (PART)
+Primary lateral sclerosis (PLS)
+Progressive Multifocal Leukoencephalopathy
+Progressive Supranuclear Palsy (PSP)
+PS
+PSD pallidum
+PSD PNLA
+pseudo-dementia
+Pseudo-dementia
+pseudo-tabes
+pseudodementia
+PSP /IOH/ degen/CAA
+PSP c astrocytic plaques
+PSP change
+PSP PNLA / AGD/SC
+PSP tauopathy
+PSP type
+PSP typical
+PSP-C
+PSP-like
+PSP-P
+PVL
+radiation leuko
+Rathke
+Report pending
+respirator brain
+RF encephalopathystatus-post meningioma
+RMSF
+Rosenthal fiber encephalopathy
+RT leuko
+rule out CTE
+ruptured aneurysm
+Sagittal sinus thrombosis
+Sarcoidosis meningovascular
+SBMA
+SC degeneration
+SC pre-HpScl
+SC toothpaste artifact
+SCA
+SCA3
+SCD
+Schwannoma
+Schwannosis
+sclerosis
+SCP
+SCP CVA
+SCVD
+secondary infarcts
+Seizures
+Senile Changes (SC)
+shunt adhesions
+sickle cell
+SLE microvasculopathy
+SMA
+SNAG
+SND
+SND+OPCA
+SND=OPCA
+SND>=OPCA
+SND>OPCA
+SOD1
+SP
+sp DBS
+sp frontal Bx
+sp pallidotomy
+sp thalamotomy
+spheroids
+Spinal muscular atrophy
+spinobulbar ALS
+Sporadic Fatal Insomnia (sFI)
+status
+status post DBS
+status post pituitary adenoma
+status post Rx meningioma
+status post VPS
+status post VPS for NPH
+status
+spongiosis
+Striato-pallido-Luysial autoimmune encephalitis
+Subarachnoid Hemorrhage (SAH)
+Subdural Hemorrhage (SDH)
+subependymal lesion
+Subependymoma
+Subicular Sclerosis (SubScl)
+Superficial Siderosis
+synuclein TSA
+T-cell leukemia
+T-cell lymphoma
+TAG
+tapered neurites
+tau
+TDP-43 proteinopathy, non-FTLD
+Telangiectasia
+telangiectasia sclerotic pontine base
+testicular atrophy
+Testicular atrophy
+thal CVA
+thal gliosis
+thal lacune
+thalamic
+Thalamic dementia
+thalamic fusion
+thalamic gliosis
+thalamic inclusions
+thrombosis
+thyro
+thyroiditis
+TLBD
+Toferson Rx
+tonsil herniation
+toxoplasma encephalitis
+Toxoplasmosis
+TPP
+tract degen
+Transverse myelitis
+trauma
+Traumatic brain injury
+traumatic encephalomalacia
+traumatic hematomas
+traumatic hemorrhage
+TSE
+TSP
+TTP with MI's
+tumor emboli
+Type A
+Type B
+Type C
+ultrasound thalamomoty
+Unclassified tauopathy
+Unknown
+Unusual
+VA
+vacuolar
+vacuolation
+VaD
+vascular PD
+VaDAD
+Vascular
+Vascular Dementia
+vascular malformation
+vasculitis
+vasculopathy
+venous
+venous anomaly
+venous thrombosis
+Venous thrombosis
+ventriculitis
+venulitis
+Viral encephalitis
+VZV arteritis
+VZV vasculities meningoencephalitis
+w CVA
+watershed CVA
+Watershed infarct
+WBC plugs
+Wernicke's
+Weston-Hurst Syndrome
+white matter lesion
+white matter MI's
+WM artifactual microvacuolation
+WM CVAs
+WM infarcts
+WM ischemia
+WM MI's
+WM microvacuolation
