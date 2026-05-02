@@ -97,6 +97,7 @@
 .qpb-filters-modal-body {
   padding: 20px 24px 24px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   flex: 1;
 }
 

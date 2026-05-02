@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
 
-    <BrowserRouter basename='/dist-serve'>
+    <BrowserRouter basename='/bbm-qt'>
     <App />
     </BrowserRouter>
   </React.StrictMode>

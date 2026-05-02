@@ -1,8 +1,9 @@
 import { auth } from '../firebase'
 import { getAuthHeaders } from './auth'
 import { ColumnKey } from '../columns'
+import { API_BASE } from './config'
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
+
 
 export interface UserProfile {
   columnPrefs: Record<ColumnKey, boolean> | null

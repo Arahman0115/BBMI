@@ -809,7 +809,7 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset, onS
   return (
     <div className={`filter-comp-box${expanded ? ' filter-comp-box--expanded' : ''}`}>
 
-      <div className='filter-comp-header'>
+      {!expanded && <div className='filter-comp-header'>
         <span className='filter-comp-title'>Filters</span>
         <div className='filter-header-actions'>
           <button className='filter-search-btn' onClick={onSearch}>
@@ -838,7 +838,7 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset, onS
             <span className='filter-clear-tooltip'>Clear filters</span>
           </div>
         </div>
-      </div>
+      </div>}
 
       <div className='filter-comp-sections'>
 

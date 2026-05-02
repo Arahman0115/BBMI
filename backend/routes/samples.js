@@ -80,7 +80,7 @@ function buildQuery(params) {
   if (ceradScores) filters.push({ 'pathology.ceradNp':    { $in: [].concat(ceradScores) } })
 
   if (primaryDiagnosis) {
-    filters.push({ diagnosis: { $elemMatch: { order: 1, category: { $in: [].concat(primaryDiagnosis) } } } })
+    filters.push({ diagnosis: { $elemMatch: { order: 1, specificType: { $in: [].concat(primaryDiagnosis) } } } })
   }
   if (ad_type) {
     filters.push({ diagnosis: { $elemMatch: { order: 1, subtype: { $in: [].concat(ad_type) } } } })

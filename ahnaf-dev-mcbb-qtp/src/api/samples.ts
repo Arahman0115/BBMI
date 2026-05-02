@@ -1,7 +1,7 @@
 import { FilterState, DonorRecord } from '../types'
 import { getAuthHeaders } from './auth'
+import { API_BASE } from './config'
 
-const API_BASE = '/api'
 
 function toParams(f: FilterState): URLSearchParams {
   const p = new URLSearchParams()

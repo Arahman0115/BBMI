@@ -62,15 +62,15 @@
 .filter-search-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  height: 26px;
-  padding: 0 11px;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
   background: rgba(0, 104, 177, 0.15);
   border: 1px solid rgba(0, 104, 177, 0.35);
-  border-radius: 6px;
+  border-radius: 5px;
   color: #4aa3e0;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;

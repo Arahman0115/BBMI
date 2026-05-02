@@ -1,6 +1,5 @@
 import { getAuthHeaders } from './auth'
-
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
+import { API_BASE } from './config'
 
 export interface AdminUser {
   uid: string
