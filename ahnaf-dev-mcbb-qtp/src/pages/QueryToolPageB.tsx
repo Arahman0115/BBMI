@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from '../firebase'
 import FilterComp from '../components/FilterComp'
 import CollapsibleSidebar from '../components/CollapsibleSidebar'
 import NavBar from '../components/NavBar'
+import UserMenu from '../components/UserMenu'
 import DataTable from '../components/DataTable'
 import PreferencesPanel from '../components/PreferencesPanel'
 import RecordDrawer from '../components/RecordDrawer'
@@ -41,7 +39,6 @@ const ColumnsIcon = () => (
 )
 
 const QueryToolPageB: React.FC = () => {
-  const navigate = useNavigate()
   const [chartsOpen,     setChartsOpen]     = useState(false)
   const [prefOpen,       setPrefOpen]       = useState(false)
   const [filtersExpanded, setFiltersExpanded] = useState(false)
@@ -128,18 +125,11 @@ const QueryToolPageB: React.FC = () => {
     <div className='query-tool-page-main'>
 
       <div className='query-tool-page-header'>
-        <NavBar />
         <img src={`${import.meta.env.BASE_URL}logo_mayo.svg`} alt='Mayo Clinic' className='header-logo' />
         <div className='header-divider' />
-        <h1 className='qp-title'>Query Tool</h1>
+        <NavBar />
         <div className='header-spacer' />
-        <button className='header-logout' onClick={() => signOut(auth).then(() => navigate('/login'))}>
-          <svg width='15' height='15' viewBox='0 0 20 20' fill='currentColor'>
-            <path d='M3 3h7a1 1 0 010 2H4v10h6a1 1 0 010 2H3a1 1 0 01-1-1V4a1 1 0 011-1z'/>
-            <path d='M13.293 6.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L14.586 11H8a1 1 0 010-2h6.586l-1.293-1.293a1 1 0 010-1.414z'/>
-          </svg>
-          Sign Out
-        </button>
+        <UserMenu />
       </div>
 
       <div className='query-tool-page-body'>

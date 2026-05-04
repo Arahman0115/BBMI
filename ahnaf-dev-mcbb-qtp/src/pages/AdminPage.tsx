@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from '../firebase'
 import { useAuth } from '../context/AuthContext'
 import NavBar from '../components/NavBar'
+import UserMenu from '../components/UserMenu'
 import { fetchAdminUsers, updateUserRole, AdminUser } from '../api/admin'
 import './AdminPage.css'
 
@@ -41,19 +40,11 @@ const AdminPage: React.FC = () => {
   return (
     <div className='admin-page'>
       <header className='admin-header'>
-        <div className='admin-header-left'>
-          <NavBar />
-          <div className='admin-title-block'>
-            <span className='admin-title'>Admin Panel</span>
-            <span className='admin-subtitle'>User Management</span>
-          </div>
-        </div>
-        <button
-          className='header-logout'
-          onClick={() => signOut(auth).then(() => navigate('/login'))}
-        >
-          Sign out
-        </button>
+        <img src={`${import.meta.env.BASE_URL}logo_mayo.svg`} alt='Mayo Clinic' className='header-logo' />
+        <div className='header-divider' />
+        <NavBar />
+        <div className='header-spacer' />
+        <UserMenu />
       </header>
 
       <main className='admin-main'>

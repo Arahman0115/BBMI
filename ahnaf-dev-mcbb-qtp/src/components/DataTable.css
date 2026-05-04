@@ -174,6 +174,7 @@
 
 .dt-pill--frozen { background: rgba(var(--accent-rgb), 0.12); color: var(--accent); }
 .dt-pill--ffpe   { background: rgba(160, 100, 220, 0.12);     color: #a064dc; }
+.dt-pill--no     { background: rgba(255, 255, 255, 0.04);     color: #4a5a6a; }
 
 .dt-dim {
   color: #4a5a6a;

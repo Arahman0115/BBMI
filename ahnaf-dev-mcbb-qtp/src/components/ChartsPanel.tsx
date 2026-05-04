@@ -77,8 +77,8 @@ const ChartsPanel: React.FC<Props> = ({ data }) => {
 
   const donut = (d: {name:string;value:number}[]) => (
     <>
-      <PieChart width={150} height={150}>
-        <Pie data={d} cx={71} cy={71} innerRadius={42} outerRadius={64}
+      <PieChart width={140} height={110}>
+        <Pie data={d} cx={68} cy={53} innerRadius={32} outerRadius={50}
              dataKey='value' paddingAngle={3} strokeWidth={0}>
           {d.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
         </Pie>
@@ -93,7 +93,7 @@ const ChartsPanel: React.FC<Props> = ({ data }) => {
       <div className='cp-scroll'>
 
         <Card title='Age at Death'>
-          <BarChart width={230} height={170} data={ages} barCategoryGap='35%' margin={{ top: 4, right: 4, left: -12, bottom: 0 }}>
+          <BarChart width={230} height={280} data={ages} barCategoryGap='35%' margin={{ top: 4, right: 4, left: -12, bottom: 0 }}>
             <XAxis dataKey='label' tick={TICK} axisLine={ALINE} tickLine={false} />
             <YAxis tick={TICK} axisLine={false} tickLine={false} allowDecimals={false} />
             <Tooltip content={<Tip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
@@ -102,7 +102,7 @@ const ChartsPanel: React.FC<Props> = ({ data }) => {
         </Card>
 
         <Card title='Study Source'>
-          <BarChart width={260} height={170} data={study} layout='vertical'
+          <BarChart width={260} height={280} data={study} layout='vertical'
                     barCategoryGap='35%' margin={{ top: 4, right: 8, left: 4, bottom: 0 }}>
             <XAxis type='number' tick={TICK} axisLine={ALINE} tickLine={false} allowDecimals={false} />
             <YAxis type='category' dataKey='name' tick={{ ...TICK, fontSize: 8 }}

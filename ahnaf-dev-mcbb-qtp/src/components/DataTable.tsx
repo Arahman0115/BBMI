@@ -31,11 +31,11 @@ const CUSTOM_CELLS: Partial<Record<ColumnKey, (row: DonorRecord) => React.ReactN
     </span>
   ),
   FrozenTissueAvailable: r => r.tissue?.frozenAvailable
-    ? <span className='dt-pill dt-pill--frozen'>Frozen</span>
-    : <span className='dt-dim'>—</span>,
+    ? <span className='dt-pill dt-pill--frozen'>Yes</span>
+    : <span className='dt-pill dt-pill--no'>No</span>,
   FixedTissueAvailable: r => r.tissue?.fixedAvailable
-    ? <span className='dt-pill dt-pill--ffpe'>FFPE</span>
-    : <span className='dt-dim'>—</span>,
+    ? <span className='dt-pill dt-pill--ffpe'>Yes</span>
+    : <span className='dt-pill dt-pill--no'>No</span>,
 }
 
 type ServerSideProps = {
