@@ -47,7 +47,8 @@ function buildQuery(params) {
     idSearch, sex, race, ageRanges,
     thalPhases, braakStages, ceradScores,
     primaryDiagnosis, ad_type, secondaryDiagnoses,
-    apoe, mapt, studySource,
+    apoe, apoeMethod, mapt, studySource,
+    clinicalDiagnosis,
     tissueAvailable,
     diagnosisOrderDx, diagnosisOrderMin, diagnosisOrderMax,
   } = params
@@ -64,8 +65,14 @@ function buildQuery(params) {
   if (race)        filters.push({ 'demographics.race':     toIn(race) })
   if (studySource) filters.push({ 'intake.studySource':    toIn(studySource) })
 
-  if (apoe) filters.push({ genetics: { $elemMatch: { marker: 'APOE', value: toIn(apoe) } } })
-  if (mapt) filters.push({ genetics: { $elemMatch: { marker: 'MAPT', value: toIn(mapt) } } })
+  if (apoe)       filters.push({ genetics: { $elemMatch: { marker: 'APOE', value: toIn([].concat(apoe).map(Number)) } } })
+  if (apoeMethod) filters.push({ genetics: { $elemMatch: { marker: 'APOE', method: toIn(apoeMethod) } } })
+  if (mapt)       filters.push({ genetics: { $elemMatch: { marker: 'MAPT', value: toIn(mapt) } } })
+
+  if (clinicalDiagnosis) {
+    const re = new RegExp([].concat(clinicalDiagnosis)[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+    filters.push({ 'clinical.clinicalDiagnosis': { $elemMatch: { diagnosis: re } } })
+  }
 
   if (ageRanges) {
     const ranges = ageRanges.split(';').map(s => {

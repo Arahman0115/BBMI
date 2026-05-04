@@ -22,6 +22,7 @@
 .csb--closed {
   width: 36px;
   min-width: 36px;
+  height: auto;
   align-self: flex-start;
   margin-left: -24px;
   border-radius: 0 10px 10px 0;

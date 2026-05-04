@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FilterState, Sex, ApoeGenotype, MaptHaplotype, BraakStage, ThalPhase, AlzheimersType, CeradScore } from '../types'
+import { FilterState, Sex, ApoeGenotype, ApoeMethod, MaptHaplotype, BraakStage, ThalPhase, AlzheimersType, CeradScore } from '../types'
 import MultiSelect, { MSOption } from './MultiSelect'
 import './FilterComp.css'
 
@@ -55,6 +55,13 @@ const APOE_OPTS: MSOption<ApoeGenotype>[] = [
   { value: '33', label: 'E3/E3' },
   { value: '34', label: 'E3/E4' },
   { value: '44', label: 'E4/E4' },
+]
+
+const APOE_METHOD_OPTS: MSOption<ApoeMethod>[] = [
+  { value: 'Clinical',  label: 'Clinical' },
+  { value: 'Molecular', label: 'Molecular' },
+  { value: 'Protein',   label: 'Protein' },
+  { value: 'Other',     label: 'Other' },
 ]
 
 const MAPT_OPTS: MSOption<MaptHaplotype>[] = [
@@ -901,6 +908,10 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset, onS
       <div className='filter-section'>
         <span className='filter-section-label'>Diagnosis</span>
 
+        <input className='filter-comp-input' placeholder='Clinical Diagnosis (search)'
+          value={filterState.clinicalDiagnosis?.[0] ?? ''}
+          onChange={e => set({ clinicalDiagnosis: e.target.value ? [e.target.value] : undefined })} />
+
         <MultiSelect<string>
           placeholder='Primary Diagnosis (any)'
           options={DX_OPTS}
@@ -967,35 +978,26 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset, onS
       <div className='filter-section'>
         <span className='filter-section-label'>Neuropathology</span>
 
-        <div className='filter-group'>
-          <span className='filter-group-label'>Thal Phase</span>
-          <MultiSelect<ThalPhase>
-            placeholder='Any phase'
-            options={THAL_OPTS}
-            selected={filterState.thalPhases ?? []}
-            onChange={v => set({ thalPhases: v.length ? v : undefined })}
-          />
-        </div>
+        <MultiSelect<ThalPhase>
+          placeholder='Thal Phase (any)'
+          options={THAL_OPTS}
+          selected={filterState.thalPhases ?? []}
+          onChange={v => set({ thalPhases: v.length ? v : undefined })}
+        />
 
-        <div className='filter-group'>
-          <span className='filter-group-label'>Braak Stage</span>
-          <MultiSelect<BraakStage>
-            placeholder='Any stage'
-            options={BRAAK_OPTS}
-            selected={filterState.braakStages ?? []}
-            onChange={v => set({ braakStages: v.length ? v : undefined })}
-          />
-        </div>
+        <MultiSelect<BraakStage>
+          placeholder='Braak Stage (any)'
+          options={BRAAK_OPTS}
+          selected={filterState.braakStages ?? []}
+          onChange={v => set({ braakStages: v.length ? v : undefined })}
+        />
 
-        <div className='filter-group'>
-          <span className='filter-group-label'>CERAD</span>
-          <MultiSelect<CeradScore>
-            placeholder='Any score'
-            options={CERAD_OPTS}
-            selected={filterState.ceradScores ?? []}
-            onChange={v => set({ ceradScores: v.length ? v : undefined })}
-          />
-        </div>
+        <MultiSelect<CeradScore>
+          placeholder='CERAD (any)'
+          options={CERAD_OPTS}
+          selected={filterState.ceradScores ?? []}
+          onChange={v => set({ ceradScores: v.length ? v : undefined })}
+        />
       </div>
 
       <div className='filter-section'>
@@ -1006,6 +1008,13 @@ const FilterComp: React.FC<Props> = ({ filterState, setFilterState, onReset, onS
           options={APOE_OPTS}
           selected={filterState.apoe ?? []}
           onChange={v => set({ apoe: v.length ? v : undefined })}
+        />
+
+        <MultiSelect<ApoeMethod>
+          placeholder='APOE Method (any)'
+          options={APOE_METHOD_OPTS}
+          selected={filterState.apoeMethod ?? []}
+          onChange={v => set({ apoeMethod: v.length ? v : undefined })}
         />
 
         <MultiSelect<MaptHaplotype>

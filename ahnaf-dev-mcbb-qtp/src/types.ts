@@ -1,5 +1,6 @@
 export type Sex            = 'Male' | 'Female'
 export type ApoeGenotype   = '22' | '23' | '24' | '33' | '34' | '44'
+export type ApoeMethod     = 'Clinical' | 'Molecular' | 'Protein' | 'Other'
 export type AlzheimersType = 'Amnestic AD' | 'Atypical AD'
 export type MaptHaplotype  = 'H1H1' | 'H1H2' | 'H2H2'
 export type CeradScore     = 'None' | 'Sparse' | 'Moderate' | 'Frequent' | 'None - Sparse' | 'Sparse - Moderate' | 'Moderate - Frequent'
@@ -162,7 +163,9 @@ export interface FilterState {
   ad_type?:           AlzheimersType[]
   secondaryDiagnoses?: string[]
   apoe?:              ApoeGenotype[]
+  apoeMethod?:        ApoeMethod[]
   mapt?:              MaptHaplotype[]
+  clinicalDiagnosis?: string[]
   tissueAvailable?:   string[]
   diagnosisOrder?:    { diagnosis: string; min: number; max: number }
 }
