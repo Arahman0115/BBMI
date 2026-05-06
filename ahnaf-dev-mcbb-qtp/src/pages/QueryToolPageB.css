@@ -179,3 +179,35 @@
 .qpb-search-btn:hover {
   opacity: 0.88;
 }
+
+.qpb-export-modal {
+  background: #0e1419;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  width: 320px;
+  overflow: hidden;
+}
+
+.qpb-export-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.qpb-export-modal-desc {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.qpb-export-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.qpb-search-btn--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}

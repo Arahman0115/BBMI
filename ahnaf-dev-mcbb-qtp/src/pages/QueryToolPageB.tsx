@@ -11,38 +11,18 @@ import ChartsPanel from '../components/ChartsPanel'
 import { useColumnPreferences } from '../hooks/useColumnPreferences'
 import { useSamplesQuery } from '../hooks/useSamplesQuery'
 import { useAuth } from '../context/AuthContext'
+import { ALL_COLUMNS, ColumnDef } from '../columns'
+import { ChartIcon, ExportIcon, ColumnsIcon } from '../components/icons'
+import { exportCSV } from '../utils/exportCSV'
 import './QueryToolPage.css'
 import './QueryToolPageB.css'
 
-const ChartIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
-    <rect x="2" y="10" width="3" height="8"  rx="1" />
-    <rect x="7" y="6"  width="3" height="12" rx="1" />
-    <rect x="12" y="3" width="3" height="15" rx="1" />
-    <rect x="17" y="8" width="1" height="10" rx="0.5" />
-  </svg>
-)
-
-const ExportIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
-    <path d="M10 2a1 1 0 011 1v9.586l2.293-2.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V3a1 1 0 011-1z" />
-    <path d="M3 15a1 1 0 011 1v1h12v-1a1 1 0 112 0v1a2 2 0 01-2 2H4a2 2 0 01-2-2v-1a1 1 0 011-1z" />
-  </svg>
-)
-
-const ColumnsIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
-    <rect x="2"  y="3" width="4" height="14" rx="1" />
-    <rect x="8"  y="3" width="4" height="14" rx="1" />
-    <rect x="14" y="3" width="4" height="14" rx="1" />
-  </svg>
-)
-
 const QueryToolPageB: React.FC = () => {
-  const [chartsOpen,     setChartsOpen]     = useState(false)
-  const [prefOpen,       setPrefOpen]       = useState(false)
+  const [chartsOpen,      setChartsOpen]      = useState(false)
+  const [prefOpen,        setPrefOpen]        = useState(false)
   const [filtersExpanded, setFiltersExpanded] = useState(false)
-  const [selectedId,     setSelectedId]     = useState<string | undefined>()
+  const [selectedId,      setSelectedId]      = useState<string | undefined>()
+  const [exportModalOpen, setExportModalOpen] = useState(false)
   const { role } = useAuth()
   const { visible, toggle, setGroup, reset: resetCols } = useColumnPreferences()
 
@@ -53,52 +33,10 @@ const QueryToolPageB: React.FC = () => {
     search, reset,
   } = useSamplesQuery()
 
-  const handleExportCSV = () => {
+  const doExport = (cols: ColumnDef[]) => {
     if (!records.length) return
-    const gene = (r: import('../types').DonorRecord, marker: string) =>
-      r.genetics?.find(g => g.marker === marker)?.value ?? ''
-    const flatten = (r: import('../types').DonorRecord) => ({
-      npid:               r.npid ?? '',
-      sex:                r.demographics?.sex ?? '',
-      race:               r.demographics?.race ?? '',
-      age_at_death:       r.demographics?.ageAtDeath ?? '',
-      state_of_origin:    r.intake?.stateOfOrigin ?? '',
-      clinical_diagnosis: r.clinical?.clinicalDiagnosis?.map(d => d.diagnosis).filter(Boolean).join('; ') ?? '',
-      family_history:     r.clinical?.familyHistory ?? '',
-      primary_dx:         r.diagnosis?.find(d => d.order === 1)?.category ?? '',
-      primary_subtype:    r.pathology?.adSubtype ?? '',
-      secondary_dx:       r.diagnosis?.filter(d => (d.order ?? 0) > 1).map(d => d.category).join('; ') ?? '',
-      braak_stage:        r.pathology?.braakStage ?? '',
-      thal_phase:         r.pathology?.thalPhase ?? '',
-      cerad:              r.pathology?.ceradNp ?? '',
-      nia_reagan:         r.pathology?.niaReaganScore ?? '',
-      apoe_genotype:      gene(r, 'APOE'),
-      mapt:               gene(r, 'MAPT'),
-      gba:                gene(r, 'GBA'),
-      grn:                gene(r, 'GRN'),
-      frozen:             r.tissue?.frozenAvailable ?? '',
-      ffpe:               r.tissue?.fixedAvailable ?? '',
-      dna_extracted:      r.tissue?.dnaExtracted ?? '',
-      rna_seq:            r.tissue?.rnaSeq ?? '',
-      spinal_cord:        r.tissue?.spinalCord ?? '',
-      olfactory_bulb:     r.tissue?.olfactoryBulb ?? '',
-      csf:                r.tissue?.csf ?? '',
-      pmi_hours:          r.tissue?.postmortemInterval ?? '',
-      brain_source:       r.intake?.brainSource ?? '',
-      study_source:       r.intake?.studySource ?? '',
-    })
-    const flat    = records.map(flatten)
-    const headers = Object.keys(flat[0]).join(',')
-    const rows    = flat.map(f =>
-      Object.values(f).map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')
-    )
-    const blob = new Blob([[headers, ...rows].join('\n')], { type: 'text/csv' })
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
-    a.href = url
-    a.download = `brain_bank_export_${new Date().toISOString().slice(0, 10)}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
+    exportCSV(records, cols)
+    setExportModalOpen(false)
   }
 
   const actions = [
@@ -116,7 +54,7 @@ const QueryToolPageB: React.FC = () => {
     {
       icon: <ExportIcon />,
       label: 'Export Page',
-      onClick: handleExportCSV,
+      onClick: () => setExportModalOpen(true),
       disabled: records.length === 0,
     },
   ]
@@ -208,6 +146,28 @@ const QueryToolPageB: React.FC = () => {
         record={selectedId != null ? (records.find(r => r._id === selectedId) ?? null) : null}
         onClose={() => setSelectedId(undefined)}
       />
+
+      {exportModalOpen && (
+        <div className='qpb-charts-backdrop' onClick={() => setExportModalOpen(false)}>
+          <div className='qpb-export-modal' onClick={e => e.stopPropagation()}>
+            <div className='qpb-charts-modal-header'>
+              <span className='qpb-charts-modal-title'>Export CSV</span>
+              <button className='qpb-charts-close' onClick={() => setExportModalOpen(false)}>✕</button>
+            </div>
+            <div className='qpb-export-modal-body'>
+              <p className='qpb-export-modal-desc'>Which columns would you like to export?</p>
+              <div className='qpb-export-modal-actions'>
+                <button className='qpb-search-btn' onClick={() => doExport(ALL_COLUMNS.filter(c => visible[c.key]))}>
+                  Visible Columns
+                </button>
+                <button className='qpb-search-btn qpb-search-btn--secondary' onClick={() => doExport(ALL_COLUMNS)}>
+                  All Columns
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )

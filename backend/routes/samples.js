@@ -53,7 +53,9 @@ function buildQuery(params) {
     diagnosisOrderDx, diagnosisOrderMin, diagnosisOrderMax,
   } = params
 
-  const toIn = val => { const a = [].concat(val); return a.length === 1 ? a[0] : { $in: a } }
+  const toIn = val => {
+  const a = [].concat(val);
+  return a.length === 1 ? a[0] : { $in: a } }
   const filters = []
 
   if (idSearch) {
@@ -102,10 +104,12 @@ function buildQuery(params) {
   }
 
   if (tissueAvailable) {
-    ;[].concat(tissueAvailable).forEach(t => {
-      const field = TISSUE_FIELD_MAP[t]
-      if (field) filters.push({ [field]: true })
-    })
+    const tissueConds = [].concat(tissueAvailable)
+      .map(t => TISSUE_FIELD_MAP[t])
+      .filter(Boolean)
+      .map(field => ({ [field]: true }))
+    if (tissueConds.length === 1) filters.push(tissueConds[0])
+    else if (tissueConds.length > 1) filters.push({ $or: tissueConds })
   }
 
   return filters.length > 0 ? { $and: filters } : {}
@@ -156,3 +160,37 @@ router.get('/:npid', async (req, res) => {
 })
 
 module.exports = router
+
+
+/* Full query would look like this if filtering on race, brak stage, prim and secondary dx and tissue availability {
+  $and: [
+    // Multiple races
+    {
+      "demographics.race": { $in: ['White', 'Black', 'Hispanic'] }
+    },
+
+    // Braak stages
+    {
+      "pathology.braakStage": { $in: [3, 4, 5, 6] }
+    },
+
+    // Primary diagnosis: Alzheimers
+    {
+      diagnosis: { $elemMatch: { order: 1, specificType: { $in: ['Alzheimers'] } } }
+    },
+
+    // Secondary diagnosis: Parkinsons
+    {
+      diagnosis: { $elemMatch: { order: { $gt: 1 }, category: { $in: ['Parkinsons'] } } }
+    },
+
+    // Tissue available
+    {
+      brainTissue: true
+    },
+    {
+      csfTissue: true
+    },
+    // ... other tissue types
+  ]
+}*/
